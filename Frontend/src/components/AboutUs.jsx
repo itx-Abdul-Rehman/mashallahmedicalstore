@@ -35,9 +35,9 @@ export default function AboutUs() {
             wide range of health solutions. From prescription drugs to over-the-counter
             products, we’ve got you covered.
           </p>
-          <button className="px-6 py-3 bg-green-500 text-white rounded-lg shadow hover:bg-green-600 transition-all duration-300">
+          {/* <button className="px-6 py-3 bg-green-500 text-white rounded-lg shadow hover:bg-green-600 transition-all duration-300">
             Learn More
-          </button>
+          </button> */}
         </div>
       </div>
     </section>

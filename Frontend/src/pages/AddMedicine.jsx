@@ -6,13 +6,15 @@ import { useDispatch, useSelector } from "react-redux";
 import { clearMedicine, setMedicine } from "../redux/Medicine/medicineDetailSlice.js";
 import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import LoadingButtons from "../components/LoadingButton.jsx";
 
 export default function AddMedicine() {
     const navigate = useNavigate();
     const dispatch = useDispatch();
     const medicineDetails = useSelector((state) => state.addmedicine.value);
     const [image, setImage] = useState(null);
-    const [errors, setErrors] = useState({}); // error state
+    const [errors, setErrors] = useState({});
+    const [isLoading, setIsLoading] = useState(false);
 
     const categories = [
         "Painkiller",
@@ -60,15 +62,15 @@ export default function AddMedicine() {
         formData.append("description", medicineDetails.description);
         formData.append("category", medicineDetails.category);
         formData.append("image", image);
-    
+        setIsLoading(true);
         try {
             const response = await fetch(`${import.meta.env.VITE_BACKEND_URL}/medicine/add`, {
                 method: "POST",
                 body: formData,
             });
-
+            setIsLoading(false);
             if (!response.ok) {
-                throw new Error("Failed to add medicine");
+                toast.error("Failed to add medicine");
             }
 
             const result = await response.json();
@@ -192,12 +194,15 @@ export default function AddMedicine() {
                         </div>
 
                         {/* Submit Button */}
-                        <button
-                            type="submit"
-                            className="w-full py-3 bg-green-500 hover:bg-green-600 text-white font-bold rounded-lg transition-all duration-300 text-sm sm:text-base"
-                        >
-                            Add Medicine
-                        </button>
+                        {!isLoading && (
+                            <button
+                                type="submit"
+                                className="w-full py-3 bg-green-500 hover:bg-green-600 text-white font-bold rounded-lg transition-all duration-300 text-sm sm:text-base"
+                            >
+                                Add Medicine
+                            </button>
+                        )}
+                        {isLoading && <LoadingButtons />}
                     </form>
                 </div>
             </div>

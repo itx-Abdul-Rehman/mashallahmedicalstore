@@ -6,6 +6,7 @@ const PORT=process.env.PORT;
 import express from 'express';
 import cors from 'cors';
 import { adminMedicine } from './route/admin-medicine.js';
+import { userMedicine } from './route/user-medicines.js';
 const app = express();
 
 
@@ -19,6 +20,7 @@ app.use(cors({
 app.use(express.json({limit: '10mb'}));
 
 app.use('/api',adminMedicine)
+app.use('/api',userMedicine)
 
 //server running on this
 app.listen(PORT, () => {

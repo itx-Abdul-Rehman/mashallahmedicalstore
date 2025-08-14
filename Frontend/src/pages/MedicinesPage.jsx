@@ -1,26 +1,74 @@
-import React, { useState } from "react";
-import MedicineCard from "../components/MedicineCard"; 
+import React, { useState, useEffect } from "react";
+import MedicineCard from "../components/MedicineCard";
 import { medicines } from "../Data/medicinesData.js";
 import Navbar from "../components/Navbar.jsx";
 import Footer from "../components/Footer.jsx";
+import Pagination from "../components/Pagination.jsx";
+import { toast, ToastContainer } from 'react-toastify';
 
 export default function MedicinesPage() {
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedCategory, setSelectedCategory] = useState("All");
+  const [currentPage, setCurrentPage] = useState(1);
+  const itemsPerPage = 20;
+  const [medicinesData, setMedicinesData] = useState([]);
+  const [totalMedicines, setTotalMedicines] = useState(0);
+  const [lastDocId, setLastDocId] = useState(null);
 
-  // Extract unique categories from medicines
-  const categories = ["All", ...new Set(medicines.map((med) => med.category))];
+  const categories = [
+        "All",
+        "Painkiller",
+        "Antibiotic",
+        "Muscle Relaxant",
+        "Diabetes",
+        "Acid Reducer",
+        "Heart",
+        "Anti-inflammatory",
+        "Supplement",
+        "Epilepsy/Anxiety",
+    ];
+  // Reset to first page if filters/search change
+  React.useEffect(() => {
+    setCurrentPage(1);
+  }, [searchQuery, selectedCategory]);
 
-  // Filter medicines based on search query & category
-  const filteredMedicines = medicines.filter((med) => {
-    const matchesSearch = med.name.toLowerCase().includes(searchQuery.toLowerCase());
-    const matchesCategory = selectedCategory === "All" || med.category === selectedCategory;
-    return matchesSearch && matchesCategory;
-  });
+
+  useEffect(() => {
+  const fetchData = async () => {
+    try {
+      const queryParams = new URLSearchParams({
+        itemsPerPage: itemsPerPage,
+        selectedCategory: selectedCategory,
+        lastDocId: lastDocId
+      });
+
+      const response = await fetch(
+        `${import.meta.env.VITE_BACKEND_URL}/get/medicines?${queryParams}`
+      );
+
+      if (!response.ok) {
+        throw new Error("Failed to fetch medicines");
+      }
+
+      const result = await response.json();
+      if (result.success) {
+        setMedicinesData(result.medicines);
+        setTotalMedicines(result.total);
+        setLastDocId(result.lastVisibleId);
+      }
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  fetchData();
+}, [currentPage, itemsPerPage, selectedCategory]);
+
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-100 to-green-100 p-6">
       <Navbar />
+
       {/* Page Title */}
       <h1 className="mt-10 text-3xl md:text-4xl font-bold text-green-600 mb-6 text-center animate-pulse">
         Our Medicines
@@ -43,11 +91,10 @@ export default function MedicinesPage() {
           <button
             key={idx}
             onClick={() => setSelectedCategory(cat)}
-            className={`px-4 py-2 rounded-full font-medium transition-colors duration-300 ${
-              selectedCategory === cat
+            className={`px-4 py-2 rounded-full font-medium transition-colors duration-300 ${selectedCategory === cat
                 ? "bg-green-500 text-white shadow-lg"
                 : "bg-white text-gray-700 hover:bg-green-200"
-            }`}
+              }`}
           >
             {cat}
           </button>
@@ -56,8 +103,8 @@ export default function MedicinesPage() {
 
       {/* Medicines Grid */}
       <main className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8">
-        {filteredMedicines.length > 0 ? (
-          filteredMedicines.map((med, idx) => (
+        {medicinesData.length > 0 ? (
+          medicinesData.map((med, idx) => (
             <div
               key={idx}
               className="transform hover:-translate-y-2 hover:scale-105 transition-transform duration-300"
@@ -76,8 +123,18 @@ export default function MedicinesPage() {
         )}
       </main>
 
-      <div className="mt-10"> <Footer /></div>
-     
+      {/* Pagination */}
+      <Pagination
+        totalItems={totalMedicines}
+        itemsPerPage={itemsPerPage}
+        currentPage={currentPage}
+        onPageChange={setCurrentPage}
+
+      />
+
+      <div className="mt-10">
+        <Footer />
+      </div>
     </div>
   );
 }

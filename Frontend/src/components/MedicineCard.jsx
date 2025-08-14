@@ -16,10 +16,10 @@ export default function MedicineCard({ name, image, description }) {
       <h2 className="text-xl font-bold mb-2 text-gray-800">{name}</h2>
       <p className="text-gray-600 text-sm text-center line-clamp-3">{description}</p>
 
-      <button className="mt-4 bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded-full shadow 
+      {/* <button className="mt-4 bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded-full shadow 
                          hover:shadow-lg transition-all duration-300">
         Learn More
-      </button>
+      </button> */}
     </div>
   );
 }
