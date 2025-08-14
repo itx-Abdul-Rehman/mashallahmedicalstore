@@ -11,7 +11,6 @@ export const medicineDetailSlice = createSlice({
     },
     reducers: {
         setMedicine: (state, action) => {
-            console.log(action.payload)
             const { key, value } = action.payload;
             state.value[key] = value;
         },

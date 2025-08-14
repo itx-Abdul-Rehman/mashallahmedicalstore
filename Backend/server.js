@@ -5,6 +5,7 @@ const PORT=process.env.PORT;
 
 import express from 'express';
 import cors from 'cors';
+import { adminMedicine } from './route/admin-medicine.js';
 const app = express();
 
 
@@ -15,9 +16,9 @@ app.use(cors({
 }));
 
 //body-parser
-app.use(express.json());
+app.use(express.json({limit: '10mb'}));
 
-
+app.use('/api',adminMedicine)
 
 //server running on this
 app.listen(PORT, () => {
