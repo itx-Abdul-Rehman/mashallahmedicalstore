@@ -1,0 +1,63 @@
+import React, { useState } from "react";
+import { NavLink } from 'react-router-dom';
+import { HashLink } from "react-router-hash-link";
+
+export default function Navbar() {
+    const [menuOpen, setMenuOpen] = useState(false);
+
+    return (
+        <nav className="bg-white shadow-md sticky top-0 z-50">
+            <div className="max-w-7xl mx-auto px-6 py-3 flex justify-between items-center">
+
+                {/* Brand Name */}
+                <h1 className="text-2xl font-bold bg-gradient-to-r from-green-500 to-teal-500 text-transparent bg-clip-text cursor-pointer hover:scale-105 transition-transform duration-300">
+                    Mashallah Medical Store
+                </h1>
+
+                {/* Desktop Navigation Links */}
+                <ul className="hidden md:flex space-x-8 text-gray-700 font-medium">
+                    <HashLink smooth to="/#home">
+                        <li className="hover:text-green-500 cursor-pointer transition-colors duration-200">Home</li>
+                    </HashLink>
+                    <NavLink to="/medicines">
+                        <li className="hover:text-green-500 cursor-pointer transition-colors duration-200">Medicines</li>
+                    </NavLink>
+                    <HashLink smooth to="/#about">
+                        <li className="hover:text-green-500 cursor-pointer transition-colors duration-200">About Us</li>
+                    </HashLink>
+                    <HashLink smooth to="/#contact">
+                        <li className="hover:text-green-500 cursor-pointer transition-colors duration-200">Contact</li>
+                    </HashLink>
+                </ul>
+
+                {/* Mobile Hamburger Icon */}
+                <button
+                    className="md:hidden text-gray-700 focus:outline-none"
+                    onClick={() => setMenuOpen(!menuOpen)}
+                >
+                    {menuOpen ? "✖" : "☰"}
+                </button>
+            </div>
+
+            {/* Mobile Menu */}
+            {menuOpen && (
+                <div className="md:hidden bg-white shadow-md border-t border-gray-200">
+                    <ul className="flex flex-col space-y-4 p-4 text-gray-700 font-medium">
+                        <HashLink smooth to="/#home">
+                            <li className="hover:text-green-500 cursor-pointer transition-colors duration-200">Home</li>
+                        </HashLink>
+                        <NavLink to="/medicines">
+                            <li className="hover:text-green-500 cursor-pointer transition-colors duration-200">Medicines</li>
+                        </NavLink>
+                        <HashLink smooth to="/#about">
+                            <li className="hover:text-green-500 cursor-pointer transition-colors duration-200">About Us</li>
+                        </HashLink>
+                        <HashLink smooth to="/#contact">
+                            <li className="hover:text-green-500 cursor-pointer transition-colors duration-200">Contact</li>
+                        </HashLink>
+                    </ul>
+                </div>
+            )}
+        </nav>
+    );
+}
