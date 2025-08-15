@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import MedicineCard from './components/MedicineCard';
 import Navbar from './components/Navbar';
 import { Search } from 'lucide-react';
@@ -6,55 +6,97 @@ import SearchBar from './components/SearchBar';
 import AboutUs from './components/AboutUs';
 import Footer from './components/Footer';
 
-const medicines = [
-  {
-    name: "Panadol",
-    description: "A painkiller and fever reducer, used for mild aches, headaches, and flu symptoms.",
-    image: "https://upload.wikimedia.org/wikipedia/commons/thumb/8/87/Panadol_tablets.jpg/640px-Panadol_tablets.jpg"
-  },
-  {
-    name: "Dicloran",
-    description: "Diclofenac Sodium-based analgesic, used for pain relief and inflammation.",
-    image: "https://www.sehat.com.pk/wp-content/uploads/2020/06/dicloran.jpg"
-  },
-  {
-    name: "Nuberol Forte",
-    description: "Combination of Orphenadrine and Paracetamol for muscle pain and tension.",
-    image: "https://www.sehat.com.pk/wp-content/uploads/2020/06/nuberol-forte.jpg"
-  },
-  {
-    name: "Myolax",
-    description: "Muscle relaxant for spasms and strains, containing Thiocolchicoside.",
-    image: "https://medex.com.pk/images/medicines/myolax.jpg"
-  },
-  {
-    name: "Azomax",
-    description: "Azithromycin antibiotic used for treating bacterial infections.",
-    image: "https://www.sehat.com.pk/wp-content/uploads/2020/06/azomax.jpg"
-  },
-];
-
 
 function App() {
- 
+  const [query, setQuery] = useState("");
+  const [searchData, setSearchData] = useState([]);
+  const [medicinesData, setMedicinesData] = useState([]);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const queryParams = new URLSearchParams({
+          page: 1,
+          itemsPerPage: 5,
+          selectedCategory: 'All',
+          lastDocId: null
+        });
+
+        const response = await fetch(
+          `${import.meta.env.VITE_BACKEND_URL}/get/medicines?${queryParams}`
+        );
+
+        if (!response.ok) {
+          throw new Error("Failed to fetch medicines");
+        }
+
+        const result = await response.json();
+        if (result.success) {
+          setMedicinesData(result.medicines);
+        }
+      } catch (error) {
+
+      }
+    };
+
+    fetchData();
+  }, []);
 
   return (
     <div className="min-h-screen animated-bg bg-gradient-to-br from-blue-200 via-green-200 to-yellow-100 p-6">
-  <Navbar />
-  <SearchBar />
-  <main className="grid grid-cols-1 md:grid-cols-3 gap-8 mt-10">
-    {medicines.map((med, idx) => (
-      <MedicineCard
-        key={idx}
-        name={med.name}
-        image={med.image}
-        description={med.description}
-      />
-    ))}
-  </main>
-  <AboutUs />
-  <Footer />
-</div>
+      <Navbar />
+      <SearchBar query={query} setQuery={setQuery} setSearchData={setSearchData} />
+      <main className="grid grid-cols-1 md:grid-cols-3 gap-8 mt-10">
+        {query === "" ? (
+          <>
+            {medicinesData.length > 0 ? (
+              medicinesData.map((med, idx) => (
+                <div
+                  key={idx}
+                  className="transform hover:-translate-y-2 hover:scale-105 transition-transform duration-300"
+                >
+                  <MedicineCard
+                    name={med.name}
+                    image={med.image}
+                    description={med.description}
+                    price={med.price}
+                  />
+                </div>
+              ))
+            ) : (
+              <p className="text-center text-gray-600 col-span-full animate-pulse text-xl">
+                No medicines found.
+              </p>
+            )}
+          </>
+        ) : (
+          <>
+            {searchData.length > 0 ? (
+              searchData.map((med, idx) => (
+                <div
+                  key={idx}
+                  className="transform hover:-translate-y-2 hover:scale-105 transition-transform duration-300"
+                >
+                  <MedicineCard
+                    name={med.name}
+                    image={med.image}
+                    description={med.description}
+                    price={med.price}
+                  />
+                </div>
+              ))
+            ) : (
+              <div className="text-center text-gray-600 col-span-full animate-pulse text-xl">
+                Nothing found for "{query}".
+                <hr className="border-t border-green-600 w-1/2 sm:w-1/3 md:w-1/4 mx-auto my-2" />
+              </div>
+            )}
+          </>
+        )}
+      </main>
+      <AboutUs />
+      <Footer />
+    </div>
 
   );
 }

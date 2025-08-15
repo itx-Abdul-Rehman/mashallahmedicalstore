@@ -1,6 +1,21 @@
 import React from "react";
+import { FaTrash, FaEdit } from "react-icons/fa";
+import { useNavigate } from "react-router-dom";
 
-export default function MedicineCard({ name, image, description }) {
+export default function MedicineCard({ name, image, description,price, 
+  isAdmin, alertDialog }) {
+
+  const navigate = useNavigate();
+  
+  const onDelete
+   =async () => {
+      alertDialog();
+  }
+
+  const onEdit = () => {
+      navigate('/admin/manage/update');
+  }
+
   return (
     <div className="bg-gradient-to-b from-white to-gray-50 rounded-2xl shadow-md p-5 flex flex-col items-center 
                     hover:shadow-xl hover:-translate-y-2 transition-all duration-300 ease-out cursor-pointer 
@@ -15,6 +30,13 @@ export default function MedicineCard({ name, image, description }) {
 
       <h2 className="text-xl font-bold mb-2 text-gray-800">{name}</h2>
       <p className="text-gray-600 text-sm text-center line-clamp-3">{description}</p>
+      <p className="text-gray-800 font-bold mt-2">Rs. {price}</p>
+      {isAdmin &&
+        <div className="flex gap-4 absolute top-2 right-3">
+          <FaEdit color="16a34a" onClick={onEdit} />
+          <FaTrash color="dc2626" onClick={onDelete} />
+        </div>
+      }
 
       {/* <button className="mt-4 bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded-full shadow 
                          hover:shadow-lg transition-all duration-300">

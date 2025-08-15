@@ -1,5 +1,5 @@
 import React from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, NavLink } from "react-router-dom";
 import NavbarAdmin from "../components/NavbarAdmin";
 
 export default function AdminPage() {
@@ -21,20 +21,12 @@ export default function AdminPage() {
         </button>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
-          <div className="bg-white p-6 rounded-lg shadow-lg text-center cursor-pointer hover:scale-105 transition-transform">
-            <h2 className="font-bold text-lg text-green-600 mb-2">Manage Medicines</h2>
-            <p className="text-gray-700">Edit or delete existing medicines.</p>
-          </div>
-
-          <div className="bg-white p-6 rounded-lg shadow-lg text-center cursor-pointer hover:scale-105 transition-transform">
-            <h2 className="font-bold text-lg text-green-600 mb-2">View Reports</h2>
-            <p className="text-gray-700">Check medicine stock or usage.</p>
-          </div>
-
-          <div className="bg-white p-6 rounded-lg shadow-lg text-center cursor-pointer hover:scale-105 transition-transform">
-            <h2 className="font-bold text-lg text-green-600 mb-2">Users</h2>
-            <p className="text-gray-700">Manage store staff and admins.</p>
-          </div>
+          <NavLink  to="/admin/manage">
+            <div className="bg-white p-6 rounded-lg shadow-lg text-center cursor-pointer hover:scale-105 transition-transform">
+              <h2 className="font-bold text-lg text-green-600 mb-2">Manage Medicines</h2>
+              <p className="text-gray-700">Edit or delete existing medicines.</p>
+            </div>
+          </NavLink>
         </div>
       </div>
     </div>

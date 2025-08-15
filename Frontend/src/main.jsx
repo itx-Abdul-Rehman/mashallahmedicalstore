@@ -6,8 +6,10 @@ import MedicinesPage from './pages/MedicinesPage';
 import AdminPage from './pages/AdminPage';
 import AddMedicine from './pages/AddMedicine';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import AdminManageMedicines from './pages/AdminManageMedicines';
 import store from './redux/store.js'
 import { Provider } from 'react-redux'
+import UpdateMedicine from './pages/UpdateMedicine.jsx';
 
 ReactDOM.render(
   <React.StrictMode>
@@ -18,6 +20,8 @@ ReactDOM.render(
           <Route path="/medicines" element={<MedicinesPage />} />
           <Route path="/admin" element={<AdminPage />} />
           <Route path='/admin/add' element={<AddMedicine />} />
+          <Route path='/admin/manage' element={<AdminManageMedicines />} />
+          <Route path='/admin/manage/update' element={<UpdateMedicine />} />
         </Routes>
       </BrowserRouter>
     </Provider>

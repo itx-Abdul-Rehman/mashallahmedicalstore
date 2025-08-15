@@ -8,7 +8,7 @@ import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import LoadingButtons from "../components/LoadingButton.jsx";
 
-export default function AddMedicine() {
+export default function UpdateMedicine() {
     const navigate = useNavigate();
     const dispatch = useDispatch();
     const medicineDetails = useSelector((state) => state.addmedicine.value);

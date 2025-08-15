@@ -63,7 +63,6 @@ const handleGetUserMedicines = async (req, res) => {
                     id: doc.id,
                     ...doc.data()
                 }));
-
         }
 
         const total = snapshot.size;
@@ -75,5 +74,34 @@ const handleGetUserMedicines = async (req, res) => {
     }
 };
 
+const handleSearchMedicines = async (req, res) => {
+    try {
+        const { query } = req.query;
+        if (!query) {
+            return res.json({success:false, message: "Query is required" });
+        }
 
-export default handleGetUserMedicines;
+        const snapshot = await database.collection("medicines")
+            .orderBy("name")
+            .startAt(query)
+            .endAt(query + '\uf8ff')
+            .get();
+
+        if (snapshot.empty) {
+            return res.json({ success: false, message: "No medicines found" });
+        }   
+
+        const medicines = snapshot.docs.map((doc) => (
+            {
+                id: doc.id,
+                ...doc.data()
+            }
+        ))
+
+        res.json({ success: true, medicines });
+    } catch (error) {
+        res.json({ success: false, message: "Failed to search medicines" });
+    }
+}
+
+export { handleGetUserMedicines, handleSearchMedicines };

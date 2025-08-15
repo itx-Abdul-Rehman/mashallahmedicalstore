@@ -1,13 +1,48 @@
-import React, { useState } from "react";
+import React, { useState, useCallback } from "react";
 import { Search } from "lucide-react"; 
 
 
-export default function SearchBar() {
-  const [query, setQuery] = useState("");
+export default function SearchBar({query, setQuery, setSearchData}) {
+
+  const debounce=(fn,delay)=>{
+    let timerid;
+
+    return function(...args){
+      clearTimeout(timerid);
+      timerid = setTimeout(() => {
+        fn(...args);
+      }, delay);
+    }
+  }
+
+  const onSearch=async (query)=>{
+
+    try {
+       const response = await fetch(`${import.meta.env.VITE_BACKEND_URL}/search/medicines?query=${query}`);
+       if (!response.ok) {
+         
+       }
+       const result = await response.json();
+       if (result.success) {
+         setSearchData(result.medicines);
+       }else {
+         setSearchData([]);
+       }
+    } catch (error) {
+    
+    }
+
+  }
+
+  const debouncedSearch = useCallback(debounce(onSearch, 300), []);
 
   const handleChange = (e) => {
     setQuery(e.target.value);
-    // if (onSearch) onSearch(e.target.value);
+    if(e.target.value.trim() === "") {
+      setSearchData([]);
+      return;
+    }
+    debouncedSearch(e.target.value);
   };
 
   return (
