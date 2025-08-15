@@ -2,18 +2,21 @@ import React from "react";
 import { FaTrash, FaEdit } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
 
-export default function MedicineCard({ name, image, description,price, 
+export default function MedicineCard({ name, image, description, price, id,
   isAdmin, alertDialog }) {
 
   const navigate = useNavigate();
-  
+
   const onDelete
-   =async () => {
+    = async () => {
       alertDialog();
-  }
+    }
 
   const onEdit = () => {
-      navigate('/admin/manage/update');
+    navigate('/admin/manage/update',
+      {
+        state: { id, name, image, description, price }
+      });
   }
 
   return (

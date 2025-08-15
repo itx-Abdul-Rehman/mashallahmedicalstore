@@ -100,7 +100,7 @@ export default function UpdateMedicine() {
             <div className="bg-gradient-to-br from-gray-100 to-green-100 p-4 flex justify-center items-start">
                 <div className="w-full max-w-md bg-white p-6 rounded-2xl shadow-xl hover:shadow-2xl transition-shadow duration-300">
                     <h1 className="text-2xl sm:text-3xl font-bold text-green-600 mb-6 text-center">
-                        Add New Medicine
+                        Update Medicine
                     </h1>
 
                     <form onSubmit={handleSubmit} className="space-y-4">
