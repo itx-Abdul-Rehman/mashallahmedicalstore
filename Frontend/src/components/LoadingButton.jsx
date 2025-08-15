@@ -3,7 +3,7 @@ import Button from '@mui/material/Button';
 import SaveIcon from '@mui/icons-material/Save';
 import Stack from '@mui/material/Stack';
 
-export default function LoadingButtons() {
+export default function LoadingButtons({text}) {
   return (
     <Stack spacing={2}>
       <Button
@@ -13,7 +13,7 @@ export default function LoadingButtons() {
         endIcon={<SaveIcon />}
         variant="outlined"
       >
-        Adding...
+        {text}
       </Button>
     </Stack>
   );

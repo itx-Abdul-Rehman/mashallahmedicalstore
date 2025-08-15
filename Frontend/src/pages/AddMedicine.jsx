@@ -227,7 +227,7 @@ export default function AddMedicine() {
                                 Add Medicine
                             </button>
                         )}
-                        {isLoading && <LoadingButtons />}
+                        {isLoading && <LoadingButtons text="Adding" />}
                     </form>
                 </div>
             </div>

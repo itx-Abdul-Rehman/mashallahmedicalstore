@@ -70,29 +70,23 @@ export default function UpdateMedicine() {
 
         if (Object.keys(newErrors).length > 0) return;
 
-         if(image===img){
-            console.log("Image is unchanged");
-            return
-         }else{
-            console.log("Image is changed");
-            return
-         }
 
         const formData = new FormData();
+        formData.append("id", id);
         formData.append("name", medicineDetails.name);
         formData.append("description", medicineDetails.description);
         formData.append("category", medicineDetails.category);
         formData.append("price", medicineDetails.price);
-        formData.append("image", image);
+        formData.append("image", image === img ? null : image);
         setIsLoading(true);
         try {
             const response = await fetch(`${import.meta.env.VITE_BACKEND_URL}/medicine/update`, {
-                method: "POST",
+                method: "PUT",
                 body: formData,
             });
             setIsLoading(false);
             if (!response.ok) {
-                toast.error("Failed to add medicine");
+                toast.error("Failed to update medicine");
             }
 
             const result = await response.json();
@@ -101,13 +95,13 @@ export default function UpdateMedicine() {
                 dispatch(clearMedicine());
                 toast.success(result.message)
                 setTimeout(() => {
-                    navigate("/admin");
+                    navigate("/admin/manage");
                 }, 2000);
             } else {
-                toast.error(result.message || "Failed to add medicine");
+                toast.error(result.message || "Failed to update medicine");
             }
         } catch (error) {
-            toast.error(result.message || "Failed to add medicine");
+            toast.error("Failed to update medicine");
         }
 
     };
@@ -246,7 +240,7 @@ export default function UpdateMedicine() {
                                 Update Medicine
                             </button>
                         )}
-                        {isLoading && <LoadingButtons />}
+                        {isLoading && <LoadingButtons text="Updating" />}
                     </form>
                 </div>
             </div>

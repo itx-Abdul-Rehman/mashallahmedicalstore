@@ -6,6 +6,9 @@ import SearchBar from "../components/SearchBar.jsx";
 import { toast, ToastContainer } from 'react-toastify';
 import DialogBox from "../components/DialogBox.jsx";
 import { useNavigate } from "react-router-dom";
+import { useDispatch } from "react-redux";
+import { clearMedicine } from "../redux/Medicine/medicineDetailSlice.js";
+import { use } from "react";
 
 export default function AdminManageMedicines() {
     const [query, setQuery] = useState("");
@@ -20,6 +23,7 @@ export default function AdminManageMedicines() {
     const [open, setOpen] = React.useState(false);
     const [deleteMedicine, setDeleteMedicine] = useState(null);
     const navigate = useNavigate();
+    const dispatch = useDispatch();
 
     const categories = [
         "All",
@@ -33,6 +37,11 @@ export default function AdminManageMedicines() {
         "Supplement",
         "Epilepsy/Anxiety",
     ];
+
+
+    useEffect(()=>{
+      dispatch(clearMedicine());
+    },[])
 
 
     useEffect(() => {
@@ -107,6 +116,7 @@ export default function AdminManageMedicines() {
 
 
     const onBack = () => {
+        dispatch(clearMedicine());
         navigate('/admin');
     }
 
