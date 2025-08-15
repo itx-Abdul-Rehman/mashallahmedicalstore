@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import NavbarAdmin from "../components/NavbarAdmin";
 import { UploadCloud, FileText, Tag } from "lucide-react";
 import { useDispatch, useSelector } from "react-redux";
@@ -7,6 +7,7 @@ import { clearMedicine, setMedicine } from "../redux/Medicine/medicineDetailSlic
 import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import LoadingButtons from "../components/LoadingButton.jsx";
+import { useEffect } from "react";
 
 export default function UpdateMedicine() {
     const navigate = useNavigate();
@@ -15,6 +16,8 @@ export default function UpdateMedicine() {
     const [image, setImage] = useState(null);
     const [errors, setErrors] = useState({});
     const [isLoading, setIsLoading] = useState(false);
+    const { id, name, img, description, price, category } = useLocation().state;
+
 
     const categories = [
         "Painkiller",
@@ -27,6 +30,14 @@ export default function UpdateMedicine() {
         "Supplement",
         "Epilepsy/Anxiety",
     ];
+
+    useEffect(() => {
+        dispatch(setMedicine({ key: "name", value: name }));
+        dispatch(setMedicine({ key: "category", value: category }));
+        dispatch(setMedicine({ key: "description", value: description }));
+        dispatch(setMedicine({ key: "price", value: price }));
+        setImage(img);
+    }, [id, name, img, description, price, category]);
 
     const handleUploadImage = (e) => {
         const file = e.target.files[0];
@@ -59,6 +70,14 @@ export default function UpdateMedicine() {
 
         if (Object.keys(newErrors).length > 0) return;
 
+         if(image===img){
+            console.log("Image is unchanged");
+            return
+         }else{
+            console.log("Image is changed");
+            return
+         }
+
         const formData = new FormData();
         formData.append("name", medicineDetails.name);
         formData.append("description", medicineDetails.description);
@@ -67,7 +86,7 @@ export default function UpdateMedicine() {
         formData.append("image", image);
         setIsLoading(true);
         try {
-            const response = await fetch(`${import.meta.env.VITE_BACKEND_URL}/medicine/add`, {
+            const response = await fetch(`${import.meta.env.VITE_BACKEND_URL}/medicine/update`, {
                 method: "POST",
                 body: formData,
             });
@@ -224,7 +243,7 @@ export default function UpdateMedicine() {
                                 type="submit"
                                 className="w-full py-3 bg-green-500 hover:bg-green-600 text-white font-bold rounded-lg transition-all duration-300 text-sm sm:text-base"
                             >
-                                Add Medicine
+                                Update Medicine
                             </button>
                         )}
                         {isLoading && <LoadingButtons />}

@@ -158,9 +158,11 @@ export default function AdminManageMedicines() {
                                         image={med.image}
                                         description={med.description}
                                         price={med.price}
+                                        id={med.id}
+                                        category={med.category}
                                         isAdmin={isAdmin}
                                         alertDialog={() => alertDialog(idx)}
-                                    // handleDelete={() => handleDelete(idx)}
+                                        index={idx}
                                     />
                                 </div>
                             ))
@@ -183,8 +185,11 @@ export default function AdminManageMedicines() {
                                         image={med.image}
                                         description={med.description}
                                         price={med.price}
+                                        id={med.id}
+                                        category={med.category}
                                         isAdmin={isAdmin}
                                         alertDialog={() => alertDialog(idx)}
+                                        
                                     />
                                 </div>
                             ))
