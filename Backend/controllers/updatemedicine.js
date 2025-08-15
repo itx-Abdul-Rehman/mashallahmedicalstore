@@ -13,7 +13,7 @@ cloudinary.config({
 });
 
 export const handleUpdateMedicines = async (req, res) => {
-    const { id, name, description, category, price, } = req.body;
+    const { id, name, description, category, price, samename } = req.body;
     const image = req.file;
     
     try {
@@ -22,6 +22,16 @@ export const handleUpdateMedicines = async (req, res) => {
         if (!id || !name || !description || !category || !price) {
             return res.status(400).json({ success: false, message: "All fields are required" });
         }
+
+        if (samename === "false") {
+            const snapshot = await database.collection('medicines')
+                .where('name', '==', name).get();
+
+            if (!(snapshot.empty)) {
+                return res.json({ success: false, message: "Medicine with this name already exist" });
+            }
+        }
+
 
         if (image != null) {
             upload = await cloudinary.uploader.upload(image.path, {

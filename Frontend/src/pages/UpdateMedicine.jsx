@@ -70,7 +70,7 @@ export default function UpdateMedicine() {
 
         if (Object.keys(newErrors).length > 0) return;
 
-
+    
         const formData = new FormData();
         formData.append("id", id);
         formData.append("name", medicineDetails.name);
@@ -78,6 +78,11 @@ export default function UpdateMedicine() {
         formData.append("category", medicineDetails.category);
         formData.append("price", medicineDetails.price);
         formData.append("image", image === img ? null : image);
+        if (medicineDetails.name === name) {
+            formData.append("samename", true);
+        }else{
+            formData.append("samename", false);
+        }
         setIsLoading(true);
         try {
             const response = await fetch(`${import.meta.env.VITE_BACKEND_URL}/medicine/update`, {
