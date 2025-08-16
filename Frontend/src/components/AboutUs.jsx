@@ -1,21 +1,25 @@
 import React from "react";
+import medicalStore from '../assests/pic_2.png'
+import entranceMedicalStore from '../assests/pic_1.png'
 
 export default function AboutUs() {
   return (
     <section id="about" className="mt-32 bg-gradient-to-br from-green-50 to-blue-50 py-16 px-6 md:px-20">
       <div className="max-w-6xl mx-auto flex flex-col md:flex-row items-center gap-10">
-        
+
         {/* Left Images */}
         <div className="flex-1 flex flex-col gap-6">
           <img
-            src="https://images.unsplash.com/photo-1582719478250-c89cae4dc85b"
+            src={medicalStore}
             alt="Medical Store"
-            className="rounded-2xl shadow-lg hover:scale-105 transition-transform duration-500"
+            className="rounded-2xl w-full h-64 object-cotain shadow-xl 
+             hover:scale-105 hover:brightness-110 transition-all duration-500"
           />
           <img
-            src="https://images.unsplash.com/photo-1607746882042-944635dfe10e"
+            src={entranceMedicalStore}
             alt="Doctor"
-            className="rounded-2xl shadow-lg hover:scale-105 transition-transform duration-500"
+            className="rounded-2xl shadow-lg hover:scale-105 transition-transform duration-500 
+             w-full md:w-3/4 lg:w-2/3 mx-auto"
           />
         </div>
 

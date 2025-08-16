@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from "react";
 import MedicineCard from "../components/MedicineCard";
-import { medicines } from "../Data/medicinesData.js";
 import Navbar from "../components/Navbar.jsx";
 import Footer from "../components/Footer.jsx";
 import Pagination from "../components/Pagination.jsx";
 import SearchBar from "../components/SearchBar.jsx";
+import MedicineCardSkeleton from "../components/MedicineCardSkeleton.jsx";
 import { toast, ToastContainer } from 'react-toastify';
 
 export default function MedicinesPage() {
@@ -16,6 +16,7 @@ export default function MedicinesPage() {
   const [searchData, setSearchData] = useState([]);
   const [totalMedicines, setTotalMedicines] = useState(0);
   const [lastDocId, setLastDocId] = useState(null);
+  const [isResponse, setIsResponse] = useState(false);
 
   const categories = [
     "All",
@@ -40,13 +41,14 @@ export default function MedicinesPage() {
           selectedCategory: selectedCategory,
           lastDocId: lastDocId
         });
-
+         
+        setIsResponse(false)
         const response = await fetch(
           `${import.meta.env.VITE_BACKEND_URL}/get/medicines?${queryParams}`
         );
 
         if (!response.ok) {
-          throw new Error("Failed to fetch medicines");
+          
         }
 
         const result = await response.json();
@@ -54,9 +56,11 @@ export default function MedicinesPage() {
           setMedicinesData(result.medicines);
           setTotalMedicines(result.total);
           setLastDocId(result.lastVisibleId);
+          setIsResponse(true);
         }
+        setIsResponse(true);
       } catch (error) {
-        console.error(error);
+        setIsResponse(true);
       }
     };
 
@@ -89,6 +93,7 @@ export default function MedicinesPage() {
                 }`}
             >
               {cat}
+
             </button>
           ))}
         </div>
@@ -96,6 +101,8 @@ export default function MedicinesPage() {
 
       {/* Medicines Grid */}
       <main className="mt-10 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8">
+         {isResponse ?(
+         <>
         {query === "" ? (
           <>
             {medicinesData.length > 0 ? (
@@ -143,6 +150,10 @@ export default function MedicinesPage() {
 
             )}
           </>
+        )}
+        </>
+        ) : (
+          <MedicineCardSkeleton />
         )}
       </main>
 
