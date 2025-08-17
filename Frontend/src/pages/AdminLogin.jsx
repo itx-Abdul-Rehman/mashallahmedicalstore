@@ -8,7 +8,11 @@ export default function AdminLogin() {
     const navigate = useNavigate();
     const [formData, setFormData] = useState({ email: "", password: "" });
     const [showPassword, setShowPassword] = useState(false);
-    const [errorMessage, setErrorMessage] = useState({});
+    const [errorMessage, setErrorMessage] = useState({
+        email: "",
+        password: "",
+        server: ""
+    });
     const [successMessage, setSuccessMessage] = useState("");
     const [isResponse, setIsResponse] = useState(true);
 
@@ -66,7 +70,7 @@ export default function AdminLogin() {
     };
 
 
-    const onResetHere=()=>{
+    const onResetHere = () => {
         navigate('/admin/reset')
     }
 
@@ -82,15 +86,24 @@ export default function AdminLogin() {
                 </h1>
 
                 {/* Error Box */}
-                {errorMessage.email || errorMessage.password || errorMessage.server && (
-                    <div className="w-full border-red-800 bg-red-100 border rounded-md flex justify-center items-center transition-all">
-                        {errorMessage.email && <p className="text-red-600 text-sm text-center p-2">{errorMessage.email}</p>}
-                        {errorMessage.password && <p className="text-red-600 text-sm text-center p-2">{errorMessage.password}</p>}
-                        {errorMessage.server && <p className="text-red-600 text-sm text-center p-2">{errorMessage.server}</p>}
-                    </div>
+                {(errorMessage.email || errorMessage.password || errorMessage.server) && (
+                    <>
+                    {errorMessage.email && 
+                        <div className="w-full border-red-800 bg-red-100 border rounded-md flex justify-center items-center transition-all mb-4">
+                         <p className="text-red-600 text-sm text-center p-2">{errorMessage.email}</p>
+                        </div>}
+                        {errorMessage.password &&
+                            <div className="w-full border-red-800 bg-red-100 border rounded-md flex justify-center items-center transition-all mb-4">
+                                <p className="text-red-600 text-sm text-center p-2">{errorMessage.password}</p>
+                            </div>}
+                        {errorMessage.server &&
+                            <div className="w-full border-red-800 bg-red-100 border rounded-md flex justify-center items-center transition-all mb-4">
+                                <p className="text-red-600 text-sm text-center p-2 ">{errorMessage.server}</p>
+                            </div>}
+                    </>
                 )}
                 {successMessage && (
-                    <div className="w-full border-green-800 bg-green-100 border rounded-md flex justify-center items-center transition-all">
+                    <div className="w-full border-green-800 bg-green-100 border rounded-md flex justify-center items-center transition-all mb-4">
                         <p className="text-green-600 text-sm text-center p-2">{successMessage}</p>
                     </div>
                 )}
@@ -110,7 +123,7 @@ export default function AdminLogin() {
                                     focus:ring-2 focus:ring-green-500 focus:border-green-500 
                                     hover:border-green-400 focus:outline-none transition-all
                                     ${errorMessage.email ? "border-red-500" : "border-gray-300"}`}
-                                required
+                                
                             />
                         </div>
                     </div>
@@ -130,7 +143,7 @@ export default function AdminLogin() {
                                     focus:ring-2 focus:ring-green-500 focus:border-green-500 
                                     hover:border-green-400 focus:outline-none transition-all
                                     ${errorMessage.password ? "border-red-500" : "border-gray-300"}`}
-                                required
+
                             />
                             <button
                                 type="button"
@@ -144,7 +157,7 @@ export default function AdminLogin() {
 
                     {/* Submit Button */}
                     {!isResponse ? (
-                        <LoadingButtons text={'Logging in'}/>
+                        <LoadingButtons text={'Logging in'} />
                     ) : (
                         <button
                             type="submit"
