@@ -7,7 +7,7 @@ export default function AdminPage() {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-100 to-green-100 p-6">
-        <NavbarAdmin />
+        <NavbarAdmin isShowLogout={true}/>
       <div className="max-w-5xl mx-auto">
         <h1 className="mt-10 text-3xl font-bold text-green-600 mb-6 text-center">
           Admin Dashboard

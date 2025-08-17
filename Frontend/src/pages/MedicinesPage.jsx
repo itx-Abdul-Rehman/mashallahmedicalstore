@@ -78,7 +78,7 @@ export default function MedicinesPage() {
       </h1>
 
       {/* Search Bar */}
-      <SearchBar query={query} setQuery={setQuery} setSearchData={setSearchData} />
+      <SearchBar query={query} setQuery={setQuery} setSearchData={setSearchData} setIsResponse={setIsResponse} />
 
       {/* Category Filters */}
       {query === "" && (

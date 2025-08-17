@@ -2,7 +2,7 @@ import React, { useState, useCallback } from "react";
 import { Search } from "lucide-react"; 
 
 
-export default function SearchBar({query, setQuery, setSearchData}) {
+export default function SearchBar({query, setQuery, setSearchData, setIsResponse}) {
 
   const debounce=(fn,delay)=>{
     let timerid;
@@ -18,6 +18,7 @@ export default function SearchBar({query, setQuery, setSearchData}) {
   const onSearch=async (query)=>{
 
     try {
+      setIsResponse(false);
        const response = await fetch(`${import.meta.env.VITE_BACKEND_URL}/search/medicines?query=${query}`);
        if (!response.ok) {
          
@@ -25,11 +26,13 @@ export default function SearchBar({query, setQuery, setSearchData}) {
        const result = await response.json();
        if (result.success) {
          setSearchData(result.medicines);
+         setIsResponse(true);
        }else {
          setSearchData([]);
+         setIsResponse(true);
        }
     } catch (error) {
-    
+      setIsResponse(true);
     }
 
   }

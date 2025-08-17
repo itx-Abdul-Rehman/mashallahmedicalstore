@@ -10,6 +10,8 @@ import AdminManageMedicines from './pages/AdminManageMedicines';
 import store from './redux/store.js'
 import { Provider } from 'react-redux'
 import UpdateMedicine from './pages/UpdateMedicine.jsx';
+import AdminLogin from './pages/AdminLogin.jsx';
+import AdminSignup from './pages/AdminSignup.jsx';
 
 ReactDOM.render(
   <React.StrictMode>
@@ -22,6 +24,8 @@ ReactDOM.render(
           <Route path='/admin/add' element={<AddMedicine />} />
           <Route path='/admin/manage' element={<AdminManageMedicines />} />
           <Route path='/admin/manage/update' element={<UpdateMedicine />} />
+          <Route path='/admin/login' element={<AdminLogin />} />
+          <Route path='/admin/signup' element={<AdminSignup />} />
         </Routes>
       </BrowserRouter>
     </Provider>
