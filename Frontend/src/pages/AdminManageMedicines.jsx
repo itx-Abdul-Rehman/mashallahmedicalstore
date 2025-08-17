@@ -97,6 +97,7 @@ export default function AdminManageMedicines() {
                 method: 'DELETE',
                 headers: {
                     'Content-Type': 'application/json',
+                    'authorization': `Bearer ${localStorage.getItem("adminToken")}`
                 },
             });
 
@@ -112,6 +113,10 @@ export default function AdminManageMedicines() {
                 }, 1000);
             } else {
                 toast.error(result.message);
+                if(response.status === 401) {
+                    localStorage.removeItem("adminToken");
+                    navigate("/admin/login");
+                }
             }
         } catch (error) {
             toast.error("Failed to delete medicine");

@@ -12,6 +12,7 @@ import { Provider } from 'react-redux'
 import UpdateMedicine from './pages/UpdateMedicine.jsx';
 import AdminLogin from './pages/AdminLogin.jsx';
 import AdminSignup from './pages/AdminSignup.jsx';
+import ResetPassword from './pages/ResetPassword.jsx';
 
 ReactDOM.render(
   <React.StrictMode>
@@ -26,6 +27,7 @@ ReactDOM.render(
           <Route path='/admin/manage/update' element={<UpdateMedicine />} />
           <Route path='/admin/login' element={<AdminLogin />} />
           <Route path='/admin/signup' element={<AdminSignup />} />
+          <Route path='/admin/reset' element={<ResetPassword />} />
         </Routes>
       </BrowserRouter>
     </Provider>

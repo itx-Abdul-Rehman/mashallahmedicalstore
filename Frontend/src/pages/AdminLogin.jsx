@@ -65,6 +65,11 @@ export default function AdminLogin() {
         }
     };
 
+
+    const onResetHere=()=>{
+        navigate('/admin/reset')
+    }
+
     return (
         <div className="min-h-screen flex flex-col items-center justify-center bg-gradient-to-br from-gray-100 to-green-100 p-6">
             <div className="absolute top-4 w-[95%]">
@@ -92,7 +97,7 @@ export default function AdminLogin() {
                 <form onSubmit={handleSubmit} className="space-y-5">
                     {/* Email Field */}
                     <div>
-                        <label className="block text-gray-700 font-medium mb-1">Email</label>
+                        <label className="block text-gray-700 font-medium mb-1">Email*</label>
                         <div className="relative">
                             <FaEnvelope className="absolute left-3 top-3 text-gray-400" />
                             <input
@@ -100,7 +105,7 @@ export default function AdminLogin() {
                                 name="email"
                                 value={formData.email}
                                 onChange={handleChange}
-                                placeholder="Enter your email"
+                                placeholder="user@example.com"
                                 className={`w-full pl-10 pr-4 py-2 border rounded-lg 
                                     focus:ring-2 focus:ring-green-500 focus:border-green-500 
                                     hover:border-green-400 focus:outline-none transition-all
@@ -112,7 +117,7 @@ export default function AdminLogin() {
 
                     {/* Password Field */}
                     <div>
-                        <label className="block text-gray-700 font-medium mb-1">Password</label>
+                        <label className="block text-gray-700 font-medium mb-1">Password*</label>
                         <div className="relative">
                             <FaLock className="absolute left-3 top-3 text-gray-400" />
                             <input
@@ -154,7 +159,7 @@ export default function AdminLogin() {
                 {/* Forgot Password */}
                 <p className="text-sm text-gray-600 text-center mt-6">
                     Forgot your password?{" "}
-                    <span className="text-green-600 font-semibold cursor-pointer hover:underline">
+                    <span onClick={onResetHere} className="text-green-600 font-semibold cursor-pointer hover:underline">
                         Reset here
                     </span>
                 </p>

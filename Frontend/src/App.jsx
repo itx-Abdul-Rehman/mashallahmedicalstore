@@ -1,11 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import MedicineCard from './components/MedicineCard';
 import Navbar from './components/Navbar';
-import { Search } from 'lucide-react';
 import SearchBar from './components/SearchBar';
 import AboutUs from './components/AboutUs';
 import Footer from './components/Footer';
 import MedicineCardSkeleton from './components/MedicineCardSkeleton';
+import { useNavigate } from 'react-router-dom';
 
 
 function App() {
@@ -13,13 +13,14 @@ function App() {
   const [searchData, setSearchData] = useState([]);
   const [medicinesData, setMedicinesData] = useState([]);
   const [isResponse, setIsResponse] = useState(false);
+  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchData = async () => {
       try {
         const queryParams = new URLSearchParams({
           page: 1,
-          itemsPerPage: 5,
+          itemsPerPage: 6,
           selectedCategory: 'All',
           lastDocId: null
         });
@@ -105,6 +106,11 @@ function App() {
           </>
         ) : <MedicineCardSkeleton />}
       </main>
+
+      <div className="text-center mt-8">
+        <button onClick={() => {navigate("/medicines");}}
+         className='bg-green-500 text-white py-2 px-4 rounded hover:bg-green-600'>Explore More</button>
+      </div>
       <AboutUs />
       <Footer />
     </div>

@@ -115,10 +115,11 @@ export default function UpdateMedicine() {
                     navigate("/admin/manage");
                 }, 2000);
             } else {
-                if(result.message === "Invalid or expired token"){
+                toast.error(result.message || "Failed to update medicine");
+                if(response.status === 401) {
+                    localStorage.removeItem("adminToken");
                     navigate("/admin/login");
                 }
-                toast.error(result.message || "Failed to update medicine");
             }
         } catch (error) {
             toast.error("Failed to update medicine");

@@ -64,6 +64,7 @@ export default function AddMedicine() {
         if (!medicineDetails.price) newErrors.price = "Price is required";
         if (!image) newErrors.image = "Please select an image";
         if (medicineDetails.price <= 0) newErrors.price = "Price must be greater than 0";
+        if(!/^\d*$/.test(medicineDetails.price)) newErrors.price = "Price must be a valid number";
 
         setErrors(newErrors);
 
@@ -97,6 +98,10 @@ export default function AddMedicine() {
                 }, 2000);
             } else {
                 toast.error(result.message || "Failed to add medicine");
+                if(response.status === 401) {
+                    localStorage.removeItem("adminToken");
+                    navigate("/admin/login");
+                }
             }
         } catch (error) {
             toast.error(result.message || "Failed to add medicine");
@@ -118,7 +123,7 @@ export default function AddMedicine() {
                         {/* Medicine Name */}
                         <div className="relative">
                             <label className="absolute -top-2 left-3 bg-white px-1 text-gray-500 text-sm flex items-center gap-1">
-                                <FileText size={14} /> Medicine Name
+                                <FileText size={14} /> Medicine Name*
                             </label>
                             <input
                                 type="text"
@@ -140,7 +145,7 @@ export default function AddMedicine() {
                         {/* Image Upload */}
                         <div className="relative">
                             <label className="absolute -top-2 left-3 bg-white px-1 text-gray-500 text-sm flex items-center gap-1">
-                                <UploadCloud size={14} /> Upload Image
+                                <UploadCloud size={14} /> Upload Image*
                             </label>
                             <input
                                 type="file"
@@ -157,7 +162,7 @@ export default function AddMedicine() {
                         {/* Description */}
                         <div className="relative">
                             <label className="absolute -top-2 left-3 bg-white px-1 text-gray-500 text-sm flex items-center gap-1">
-                                <FileText size={14} /> Description
+                                <FileText size={14} /> Description*
                             </label>
                             <textarea
                                 name="description"
@@ -181,7 +186,7 @@ export default function AddMedicine() {
                         {/* Category */}
                         <div className="relative">
                             <label className="absolute -top-2 left-3 bg-white px-1 text-gray-500 text-sm flex items-center gap-1">
-                                <Tag size={14} /> Category
+                                <Tag size={14} /> Category*
                             </label>
                             <select
                                 name="category"
@@ -210,7 +215,7 @@ export default function AddMedicine() {
                         {/* Medicine Price */}
                         <div className="relative">
                             <label className="absolute -top-2 left-3 bg-white px-1 text-gray-500 text-sm flex items-center gap-1">
-                                <FileText size={14} /> Medicine Price (per quantity)
+                                <FileText size={14} /> Medicine Price* (per quantity)
                             </label>
                             <input
                                 type="text"

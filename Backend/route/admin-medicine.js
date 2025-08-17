@@ -4,7 +4,7 @@ import multer from "multer";
 import handleAddMedicine from '../controllers/addmedicine.js';
 import handleUpdateMedicines from '../controllers/updatemedicine.js';
 import { handleLogin,handleSignup, handleLogout, verifyToken } from '../controllers/authentication.js';
-
+import handleDeleteMedicines from '../controllers/deletemedicine.js';
 
 
 // Configure multer
@@ -13,6 +13,7 @@ const upload = multer({ dest: "uploads/",limits: { fileSize: 5 * 1024 * 1024 } }
 
 router.post('/medicine/add', upload.single("image"), verifyToken, handleAddMedicine);
 router.put('/medicine/update', upload.single("image"), verifyToken, handleUpdateMedicines);
+router.delete('/delete/medicine',verifyToken,handleDeleteMedicines);
 router.post('/admin/login',handleLogin)
 router.post('/admin/signup',handleSignup)
 router.get('/admin/logout',handleLogout)
