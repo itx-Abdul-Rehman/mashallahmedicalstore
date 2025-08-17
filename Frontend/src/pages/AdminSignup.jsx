@@ -87,12 +87,12 @@ export default function AdminSignup() {
 
                 {errorMessage && (
                     <div className="w-full border-red-800 bg-red-100 border rounded-md flex justify-center items-center transition-all">
-                        <p className="text-red-600 text-center p-2">{errorMessage}</p>
+                        <p className="text-red-600 text-sm text-center p-2">{errorMessage}</p>
                     </div>
                 )}
                 {successMessage && (
                     <div className="w-full border-green-800 bg-green-100 border rounded-md flex justify-center items-center transition-all">
-                        <p className="text-green-600 text-center p-2">{successMessage}</p>
+                        <p className="text-green-600 text-sm text-center p-2">{successMessage}</p>
                     </div>
                 )}
 

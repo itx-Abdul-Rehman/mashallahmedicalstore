@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import NavbarAdmin from "../components/NavbarAdmin";
 import { UploadCloud, FileText, Tag } from "lucide-react";
@@ -7,7 +7,7 @@ import { clearMedicine, setMedicine } from "../redux/Medicine/medicineDetailSlic
 import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import LoadingButtons from "../components/LoadingButton.jsx";
-import { useEffect } from "react";
+
 
 export default function UpdateMedicine() {
     const navigate = useNavigate();
@@ -16,7 +16,7 @@ export default function UpdateMedicine() {
     const [image, setImage] = useState(null);
     const [errors, setErrors] = useState({});
     const [isLoading, setIsLoading] = useState(false);
-    const { id, name, img, description, price, category } = useLocation().state;
+    const { id, name, img, description, price, category } = useLocation().state || {};
 
 
     const categories = [
@@ -31,12 +31,23 @@ export default function UpdateMedicine() {
         "Epilepsy/Anxiety",
     ];
 
+     useEffect(()=>{
+        const token = localStorage.getItem("adminToken");
+        if (!token) {
+          navigate("/admin/login");
+        }
+      }, []); 
+
     useEffect(() => {
-        dispatch(setMedicine({ key: "name", value: name }));
-        dispatch(setMedicine({ key: "category", value: category }));
-        dispatch(setMedicine({ key: "description", value: description }));
-        dispatch(setMedicine({ key: "price", value: price }));
-        setImage(img);
+        if(!id || !name || !img || !description || !price || !category) {
+            navigate("/admin/manage");
+        } else {
+            dispatch(setMedicine({ key: "name", value: name }));
+            dispatch(setMedicine({ key: "category", value: category }));
+            dispatch(setMedicine({ key: "description", value: description }));
+            dispatch(setMedicine({ key: "price", value: price }));
+            setImage(img);
+        }
     }, [id, name, img, description, price, category]);
 
     const handleUploadImage = (e) => {
@@ -87,6 +98,7 @@ export default function UpdateMedicine() {
         try {
             const response = await fetch(`${import.meta.env.VITE_BACKEND_URL}/medicine/update`, {
                 method: "PUT",
+                headers: { "Authorization": `Bearer ${localStorage.getItem("adminToken")}` },
                 body: formData,
             });
             setIsLoading(false);
@@ -103,6 +115,9 @@ export default function UpdateMedicine() {
                     navigate("/admin/manage");
                 }, 2000);
             } else {
+                if(result.message === "Invalid or expired token"){
+                    navigate("/admin/login");
+                }
                 toast.error(result.message || "Failed to update medicine");
             }
         } catch (error) {

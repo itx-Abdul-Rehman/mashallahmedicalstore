@@ -58,6 +58,7 @@ export default function AdminLogin() {
             }
 
             setSuccessMessage("Login successfull! Redirecting...");
+            localStorage.setItem("adminToken", result.token);
             setTimeout(() => navigate("/admin"), 1500);
         } catch (error) {
             setErrorMessage({ server: "Something went wrong. Please try again." });

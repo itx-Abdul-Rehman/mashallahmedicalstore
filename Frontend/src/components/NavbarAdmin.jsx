@@ -23,6 +23,7 @@ export default function NavbarAdmin({ isShowLogout }) {
         toast.error(result.message || "Logout failed");
       }
       toast.success(result.message || "Logout successful");
+      localStorage.removeItem("adminToken");
       setTimeout(() => {
         navigate("/admin/login");
       }, 1500);

@@ -1,9 +1,19 @@
 import React from "react";
 import { useNavigate, NavLink } from "react-router-dom";
 import NavbarAdmin from "../components/NavbarAdmin";
+import { useEffect } from "react";
 
 export default function AdminPage() {
   const navigate = useNavigate();
+
+
+  useEffect(()=>{
+    const token = localStorage.getItem("adminToken");
+
+    if (!token) {
+      navigate("/admin/login");
+    }
+  }, []);
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-100 to-green-100 p-6">

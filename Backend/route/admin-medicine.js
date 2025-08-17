@@ -3,7 +3,7 @@ const router = express.Router();
 import multer from "multer";
 import handleAddMedicine from '../controllers/addmedicine.js';
 import handleUpdateMedicines from '../controllers/updatemedicine.js';
-import { handleLogin,handleSignup, handleLogout } from '../controllers/authentication.js';
+import { handleLogin,handleSignup, handleLogout, verifyToken } from '../controllers/authentication.js';
 
 
 
@@ -11,8 +11,8 @@ import { handleLogin,handleSignup, handleLogout } from '../controllers/authentic
 const upload = multer({ dest: "uploads/",limits: { fileSize: 5 * 1024 * 1024 } });
 
 
-router.post('/medicine/add', upload.single("image"), handleAddMedicine);
-router.put('/medicine/update', upload.single("image"), handleUpdateMedicines);
+router.post('/medicine/add', upload.single("image"), verifyToken, handleAddMedicine);
+router.put('/medicine/update', upload.single("image"), verifyToken, handleUpdateMedicines);
 router.post('/admin/login',handleLogin)
 router.post('/admin/signup',handleSignup)
 router.get('/admin/logout',handleLogout)

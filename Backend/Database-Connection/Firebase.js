@@ -1,4 +1,5 @@
 import admin from 'firebase-admin';
+
 import path from 'path';
 import { fileURLToPath } from 'url';
 import fs from 'fs';
@@ -14,6 +15,8 @@ admin.initializeApp({
   credential: admin.credential.cert(serviceAccount)
 });
 
+
 const db = admin.firestore();
 
 export const database = db;
+export const adminAuth = admin.auth();

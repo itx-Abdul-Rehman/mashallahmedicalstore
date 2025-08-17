@@ -3,6 +3,7 @@ dotenv.config();
 
 import { auth } from '../Database-Connection/FirebaseAuthentication.js';
 import { signInWithEmailAndPassword,signOut,createUserWithEmailAndPassword } from 'firebase/auth';
+import { adminAuth } from '../Database-Connection/Firebase.js';
 
 const handleLogin = async (req, res) => {
     const { email, password } = req.body;
@@ -13,9 +14,9 @@ const handleLogin = async (req, res) => {
         }
 
         const userCredential = await signInWithEmailAndPassword(auth, email, password);
-        const user = userCredential.user;
+        const token = await userCredential.user.getIdToken();
 
-        res.status(200).json({ success: true, user });
+        res.status(200).json({ success: true, token });
     } catch (error) {
         res.status(401).json({ success: false, message: "Invalid email or password" });
     }
@@ -56,4 +57,24 @@ const handleLogout = async (req, res) => {
     }
 }
 
-export { handleLogin, handleSignup, handleLogout };
+
+
+const verifyToken = async (req, res, next) => {
+  const authHeader = req.headers["authorization"];
+
+  if (!authHeader || !authHeader.startsWith("Bearer ")) {
+    return res.json({ success: false, message: "No token provided" });
+  }
+
+  const token = authHeader.split(" ")[1];
+
+  try {
+    const decoded = await adminAuth.verifyIdToken(token);
+    req.user = decoded;
+    next();
+  } catch (error) {
+    return res.json({ success: false, message: "Invalid or expired token" });
+  }
+};
+
+export { handleLogin, handleSignup, handleLogout, verifyToken };

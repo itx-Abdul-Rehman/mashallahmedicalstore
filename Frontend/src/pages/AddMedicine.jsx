@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import NavbarAdmin from "../components/NavbarAdmin";
 import { UploadCloud, FileText, Tag } from "lucide-react";
@@ -27,6 +27,16 @@ export default function AddMedicine() {
         "Supplement",
         "Epilepsy/Anxiety",
     ];
+
+     useEffect(()=>{
+        const token = localStorage.getItem("adminToken");
+    
+        if (!token) {
+          navigate("/admin/login");
+        }
+
+        dispatch(clearMedicine());
+      }, []);
 
     const handleUploadImage = (e) => {
         const file = e.target.files[0];
@@ -69,6 +79,7 @@ export default function AddMedicine() {
         try {
             const response = await fetch(`${import.meta.env.VITE_BACKEND_URL}/medicine/add`, {
                 method: "POST",
+                headers: { "Authorization": `Bearer ${localStorage.getItem("adminToken")}` },
                 body: formData,
             });
             setIsLoading(false);

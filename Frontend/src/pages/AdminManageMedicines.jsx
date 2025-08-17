@@ -8,7 +8,6 @@ import DialogBox from "../components/DialogBox.jsx";
 import { useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { clearMedicine } from "../redux/Medicine/medicineDetailSlice.js";
-import { use } from "react";
 import MedicineCardSkeleton from "../components/MedicineCardSkeleton.jsx";
 
 export default function AdminManageMedicines() {
@@ -44,6 +43,14 @@ export default function AdminManageMedicines() {
     useEffect(() => {
         dispatch(clearMedicine());
     }, [])
+
+     useEffect(()=>{
+        const token = localStorage.getItem("adminToken");
+    
+        if (!token) {
+          navigate("/admin/login");
+        }
+      }, []);
 
 
     useEffect(() => {
