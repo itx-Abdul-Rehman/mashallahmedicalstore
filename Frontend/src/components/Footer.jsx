@@ -1,6 +1,6 @@
 import React from "react";
 import { NavLink } from "react-router-dom";
-import { NavHashLink } from "react-router-hash-link";
+import { HashLink } from "react-router-hash-link";
 import { 
   FaFacebookF, 
   FaInstagram, 
@@ -28,18 +28,18 @@ export default function Footer() {
         <div>
           <h3 className="text-xl font-semibold mb-4">Quick Links</h3>
           <ul className="space-y-2">
-            <NavHashLink smooth to="/#home">
+            <HashLink smooth to="/#home">
               <li className="hover:text-green-200 cursor-pointer transition-colors duration-200">Home</li>
-            </NavHashLink>
+            </HashLink>
             <NavLink to="/medicines">
               <li className="hover:text-green-200 cursor-pointer transition-colors duration-200">Medicines</li>
             </NavLink>
-            <NavHashLink smooth to="/#about">
+            <HashLink smooth to="/#about">
               <li className="hover:text-green-200 cursor-pointer transition-colors duration-200">About Us</li>
-            </NavHashLink>
-            <NavHashLink smooth to="/#contact">
+            </HashLink>
+            <HashLink smooth to="/#contact">
               <li className="hover:text-green-200 cursor-pointer transition-colors duration-200">Contact</li>
-            </NavHashLink>
+            </HashLink>
           </ul>
         </div>
 
