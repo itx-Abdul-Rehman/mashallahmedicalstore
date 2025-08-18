@@ -14,7 +14,7 @@ const app = express();
 
 //cors configuration
 app.use(cors({
-    origin: process.env.CLIENT_URL || 'https://mashallahmedicalstore.onrender.com',
+    origin: 'https://mashallahmedicalstore.onrender.com',
     credentials: true
 }));
 
