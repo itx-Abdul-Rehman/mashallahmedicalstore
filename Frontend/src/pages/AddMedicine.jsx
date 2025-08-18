@@ -7,6 +7,7 @@ import { clearMedicine, setMedicine } from "../redux/Medicine/medicineDetailSlic
 import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import LoadingButtons from "../components/LoadingButton.jsx";
+import { FaArrowLeft } from "react-icons/fa";
 
 export default function AddMedicine() {
     const navigate = useNavigate();
@@ -28,15 +29,15 @@ export default function AddMedicine() {
         "Epilepsy/Anxiety",
     ];
 
-     useEffect(()=>{
+    useEffect(() => {
         const token = localStorage.getItem("adminToken");
-    
+
         if (!token) {
-          navigate("/admin/login");
+            navigate("/admin/login");
         }
 
         dispatch(clearMedicine());
-      }, []);
+    }, []);
 
     const handleUploadImage = (e) => {
         const file = e.target.files[0];
@@ -64,7 +65,11 @@ export default function AddMedicine() {
         if (!medicineDetails.price) newErrors.price = "Price is required";
         if (!image) newErrors.image = "Please select an image";
         if (medicineDetails.price <= 0) newErrors.price = "Price must be greater than 0";
-        if(!/^\d*$/.test(medicineDetails.price)) newErrors.price = "Price must be a valid number";
+        if (!/^\d*$/.test(medicineDetails.price)) newErrors.price = "Price must be a valid number";
+        if (!medicineDetails.pricePerStrip) newErrors.pricePerStrip = "Price per strip is required";
+        if (medicineDetails.pricePerStrip <= 0) newErrors.pricePerStrip = "Price per strip must be greater than 0";
+        if (!/^\d*$/.test(medicineDetails.pricePerStrip)) newErrors.pricePerStrip = "Price per strip must be a valid number";
+
 
         setErrors(newErrors);
 
@@ -75,6 +80,7 @@ export default function AddMedicine() {
         formData.append("description", medicineDetails.description);
         formData.append("category", medicineDetails.category);
         formData.append("price", medicineDetails.price);
+        formData.append("pricePerStrip", medicineDetails.pricePerStrip);
         formData.append("image", image);
         setIsLoading(true);
         try {
@@ -98,7 +104,7 @@ export default function AddMedicine() {
                 }, 2000);
             } else {
                 toast.error(result.message || "Failed to add medicine");
-                if(response.status === 401) {
+                if (response.status === 401) {
                     localStorage.removeItem("adminToken");
                     navigate("/admin/login");
                 }
@@ -109,10 +115,17 @@ export default function AddMedicine() {
 
     };
 
+    const onBack = () => {
+        dispatch(clearMedicine());
+        navigate('/admin');
+    }
+
     return (
         <div className="h-screen bg-gradient-to-br from-gray-100 to-green-100 p-6">
             <NavbarAdmin />
             <ToastContainer />
+            <FaArrowLeft color="16a34a" className="cursor-pointer fixed top-12 z-50" onClick={onBack} />
+
             <div className="bg-gradient-to-br from-gray-100 to-green-100 p-4 flex justify-center items-start">
                 <div className="w-full max-w-md bg-white p-6 rounded-2xl shadow-xl hover:shadow-2xl transition-shadow duration-300">
                     <h1 className="text-2xl sm:text-3xl font-bold text-green-600 mb-6 text-center">
@@ -230,6 +243,27 @@ export default function AddMedicine() {
                                 className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-400 text-sm"
                             />
                             {errors.price && (
+                                <div className="text-red-500 text-xs mt-1">{errors.price}</div>
+                            )}
+                        </div>
+
+                        <div className="relative">
+                            <label className="absolute -top-2 left-3 bg-white px-1 text-gray-500 text-sm flex items-center gap-1">
+                                <FileText size={14} /> Medicine Price* (per strip)
+                            </label>
+                            <input
+                                type="text"
+                                name="pricePerStrip"
+                                placeholder="Enter medicine price"
+                                value={medicineDetails.pricePerStrip}
+                                onChange={(e) =>
+                                    dispatch(
+                                        setMedicine({ key: "pricePerStrip", value: e.target.value })
+                                    )
+                                }
+                                className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-400 text-sm"
+                            />
+                            {errors.pricePerStrip && (
                                 <div className="text-red-500 text-xs mt-1">{errors.price}</div>
                             )}
                         </div>

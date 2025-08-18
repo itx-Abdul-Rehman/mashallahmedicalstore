@@ -14,16 +14,17 @@ cloudinary.config({
 
 
 const handleAddMedicine = async (req, res) => {
-    const { name, description, category,price } = req.body;
+    const { name, description, category, price, pricePerStrip } = req.body;
     const image = req.file;
   
     try {
 
-        if (!name || !description || !category || !image || !price) {
+        if (!name || !description || !category || !image || !price || !pricePerStrip) {
             return res.status(400).json({ success: false, message: "All fields are required" });
         }
 
-        const snapshot=await database.collection('medicines').where('name', '==', name).get();
+        const snapshot=await database.collection('medicines')
+        .where('name', '==', name).get();
 
         if(!(snapshot.empty)){
             return res.json({ success: false, message: "Medicine with this name already exist" });
@@ -45,6 +46,7 @@ const handleAddMedicine = async (req, res) => {
             description,
             category,
             price,
+            pricePerStrip,
             image: imageUrl,
         });
 

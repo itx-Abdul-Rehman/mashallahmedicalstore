@@ -7,7 +7,8 @@ export const medicineDetailSlice = createSlice({
             name: "",
             description: "",
             category: "",
-            price:""
+            price:"",
+            pricePerStrip: "",
         }
     },
     reducers: {
@@ -20,7 +21,8 @@ export const medicineDetailSlice = createSlice({
                 name: "",
                 description: "",
                 category: "",
-                price: ""
+                price: "",
+                pricePerStrip: "",
             }
         }
     }

@@ -191,6 +191,7 @@ export default function AdminManageMedicines() {
                                             price={med.price}
                                             id={med.id}
                                             category={med.category}
+                                            pricePerStrip={med.pricePerStrip}
                                             isAdmin={isAdmin}
                                             alertDialog={() => alertDialog(idx)}
                                             index={idx}
@@ -218,6 +219,7 @@ export default function AdminManageMedicines() {
                                             price={med.price}
                                             id={med.id}
                                             category={med.category}
+                                            pricePerStrip={med.pricePerStrip}
                                             isAdmin={isAdmin}
                                             alertDialog={() => alertDialog(idx)}
 

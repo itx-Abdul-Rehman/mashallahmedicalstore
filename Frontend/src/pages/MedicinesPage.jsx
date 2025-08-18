@@ -41,14 +41,14 @@ export default function MedicinesPage() {
           selectedCategory: selectedCategory,
           lastDocId: lastDocId
         });
-         
+
         setIsResponse(false)
         const response = await fetch(
           `${import.meta.env.VITE_BACKEND_URL}/get/medicines?${queryParams}`
         );
 
         if (!response.ok) {
-          
+
         }
 
         const result = await response.json();
@@ -101,57 +101,59 @@ export default function MedicinesPage() {
 
       {/* Medicines Grid */}
       <main className="mt-10 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8">
-         {isResponse ?(
-         <>
-        {query === "" ? (
+        {isResponse ? (
           <>
-            {medicinesData.length > 0 ? (
-              medicinesData.map((med, idx) => (
-                <div
-                  key={idx}
-                  className="transform hover:-translate-y-2 hover:scale-105 transition-transform duration-300"
-                >
-                  <MedicineCard
-                    name={med.name}
-                    image={med.image}
-                    description={med.description}
-                    price={med.price}
-                  />
-                </div>
-              ))
+            {query === "" ? (
+              <>
+                {medicinesData.length > 0 ? (
+                  medicinesData.map((med, idx) => (
+                    <div
+                      key={idx}
+                      className="transform hover:-translate-y-2 hover:scale-105 transition-transform duration-300"
+                    >
+                      <MedicineCard
+                        name={med.name}
+                        image={med.image}
+                        description={med.description}
+                        price={med.price}
+                        pricePerStrip={med.pricePerStrip}
+                      />
+                    </div>
+                  ))
+                ) : (
+                  <p className="text-center text-gray-600 col-span-full animate-pulse text-xl">
+                    No medicines found.
+                  </p>
+                )}
+              </>
             ) : (
-              <p className="text-center text-gray-600 col-span-full animate-pulse text-xl">
-                No medicines found.
-              </p>
+              <>
+                {searchData.length > 0 ? (
+                  searchData.map((med, idx) => (
+                    <div
+                      key={idx}
+                      className="transform hover:-translate-y-2 hover:scale-105 transition-transform duration-300"
+                    >
+                      <MedicineCard
+                        name={med.name}
+                        image={med.image}
+                        description={med.description}
+                        price={med.price}
+                        pricePerStrip={med.pricePerStrip}
+                      />
+                    </div>
+                  ))
+                ) : (
+
+                  <div className="text-center text-gray-600 col-span-full animate-pulse text-xl">
+                    Nothing found for "{query}".
+                    <hr className="border-t border-green-600 w-1/2 sm:w-1/3 md:w-1/4 mx-auto my-2" />
+                  </div>
+
+                )}
+              </>
             )}
           </>
-        ) : (
-          <>
-            {searchData.length > 0 ? (
-              searchData.map((med, idx) => (
-                <div
-                  key={idx}
-                  className="transform hover:-translate-y-2 hover:scale-105 transition-transform duration-300"
-                >
-                  <MedicineCard
-                    name={med.name}
-                    image={med.image}
-                    description={med.description}
-                    price={med.price}
-                  />
-                </div>
-              ))
-            ) : (
-
-              <div className="text-center text-gray-600 col-span-full animate-pulse text-xl">
-                Nothing found for "{query}".
-                <hr className="border-t border-green-600 w-1/2 sm:w-1/3 md:w-1/4 mx-auto my-2" />
-              </div>
-
-            )}
-          </>
-        )}
-        </>
         ) : (
           <MedicineCardSkeleton />
         )}

@@ -1,11 +1,17 @@
-import React from "react";
+import React, { useState } from "react";
 import { FaTrash, FaEdit } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
 
 export default function MedicineCard({ name, image, description, price, id, category,
-  isAdmin, alertDialog }) {
+  isAdmin, alertDialog, pricePerStrip }) {
 
   const navigate = useNavigate();
+  const [textSize, setTextSize] = useState({
+    startText: 0,
+    endText: 50
+  })
+  const [isMore, setIsMore] = useState(false);
+  const [totalDescriptionSize, setTotalDescriptionSize] = useState(description.length);
 
   const onDelete
     = async () => {
@@ -15,8 +21,24 @@ export default function MedicineCard({ name, image, description, price, id, cate
   const onEdit = () => {
     navigate('/admin/manage/update',
       {
-        state: { id, name, img:image, description, price, category }
+        state: { id, name, img: image, description, price, category, pricePerStrip }
       });
+  }
+
+  const onMoreClick = () => {
+    setTextSize({
+      startText: 0,
+      endText: description.length
+    })
+    setIsMore(true);
+  }
+
+  const onLessClick = () => {
+    setTextSize({
+      startText: 0,
+      endText: 50
+    })
+    setIsMore(false);
   }
 
   return (
@@ -32,8 +54,41 @@ export default function MedicineCard({ name, image, description, price, id, cate
       </div>
 
       <h2 className="text-xl font-bold mb-2 text-gray-800">{name}</h2>
-      <p className="text-gray-600 text-sm text-center line-clamp-3">{description}</p>
-      <p className="text-gray-800 font-bold mt-2">Rs. {price}</p>
+      <div className="mt-2 text-center">
+        <p className="text-gray-600 text-sm ">
+          {description.slice(textSize.startText, textSize.endText)}
+        </p>
+
+        {totalDescriptionSize > 50 && (
+          <>
+            {isMore === false ? (
+              <button
+                onClick={onMoreClick}
+                className="mt-1 inline-flex items-center text-green-600 text-xs font-medium hover:text-green-700 transition-colors"
+              >
+                <span className="text-gray-600">...</span>
+                <span className="ml-1 px-2 py-0.5 bg-green-100 text-green-700 rounded-md shadow-sm hover:bg-green-200">
+                  more
+                </span>
+              </button>
+            ) : (
+              <button
+                onClick={onLessClick}
+                className="mt-1 inline-flex items-center text-green-600 text-xs font-medium hover:text-green-700 transition-colors"
+              >
+                <span className="px-2 py-0.5 bg-green-100 text-green-700 rounded-md shadow-sm hover:bg-green-200">
+                  less
+                </span>
+              </button>
+            )}
+          </>
+        )}
+      </div>
+
+      <div className="flex justify-between w-full mt-2">
+        <p className="text-gray-800 text-sm">1 Tablet = <b>Rs. {price}</b></p>
+        <p className="text-gray-800 text-sm">1 Strip = <b>Rs. {pricePerStrip}</b></p>
+      </div>
       {isAdmin &&
         <div className="flex gap-4 absolute top-2 right-3">
           <FaEdit color="16a34a" onClick={onEdit} />
@@ -41,10 +96,6 @@ export default function MedicineCard({ name, image, description, price, id, cate
         </div>
       }
 
-      {/* <button className="mt-4 bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded-full shadow 
-                         hover:shadow-lg transition-all duration-300">
-        Learn More
-      </button> */}
     </div>
   );
 }

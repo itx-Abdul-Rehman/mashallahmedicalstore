@@ -69,6 +69,7 @@ function App() {
                         image={med.image}
                         description={med.description}
                         price={med.price}
+                        pricePerStrip={med.pricePerStrip}
                       />
                     </div>
                   ))
@@ -92,6 +93,7 @@ function App() {
                         image={med.image}
                         description={med.description}
                         price={med.price}
+                        pricePerStrip={med.pricePerStrip}
                       />
                     </div>
                   ))

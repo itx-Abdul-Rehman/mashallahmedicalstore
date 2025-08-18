@@ -13,13 +13,13 @@ cloudinary.config({
 });
 
 export const handleUpdateMedicines = async (req, res) => {
-    const { id, name, description, category, price, samename } = req.body;
+    const { id, name, description, category, price, pricePerStrip, samename } = req.body;
     const image = req.file;
     
     try {
         let upload = null;
 
-        if (!id || !name || !description || !category || !price) {
+        if (!id || !name || !description || !category || !price || !pricePerStrip) {
             return res.status(400).json({ success: false, message: "All fields are required" });
         }
 
@@ -46,6 +46,7 @@ export const handleUpdateMedicines = async (req, res) => {
                 description,
                 category,
                 price,
+                pricePerStrip,
                 image: upload.secure_url
             });
         } else {
@@ -54,7 +55,8 @@ export const handleUpdateMedicines = async (req, res) => {
                 name,
                 description,
                 category,
-                price
+                price,
+                pricePerStrip,
             });
         }
 
