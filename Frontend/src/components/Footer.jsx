@@ -1,7 +1,16 @@
 import React from "react";
-import { Facebook, Instagram, Twitter, Linkedin } from "lucide-react";
 import { NavLink } from "react-router-dom";
 import { NavHashLink } from "react-router-hash-link";
+import { 
+  FaFacebookF, 
+  FaInstagram, 
+  FaTwitter, 
+  FaLinkedinIn, 
+  FaMapMarkerAlt, 
+  FaPhoneAlt, 
+  FaEnvelope 
+} from "react-icons/fa";
+
 export default function Footer() {
   return (
     <footer id="contact" className="bg-green-600 text-white py-10 px-6 md:px-20">
@@ -10,25 +19,25 @@ export default function Footer() {
         {/* Store Info */}
         <div>
           <h2 className="text-2xl font-bold mb-4">Mashallah Medical Store</h2>
-          <p>📍 Chak 248-GB Malri, Gojra, Pakistan</p>
-          <p>📞 +92 344 3068267</p>
-          <p>✉ info@mashallahmedical.com</p>
+          <p className="flex items-center"><FaMapMarkerAlt className="mr-2 text-white" /> Chak 248-GB Malri, Gojra, Pakistan</p>
+          <p className="flex items-center"><FaPhoneAlt className="mr-2 text-white" /> +92 344 3068267</p>
+          <p className="flex items-center"><FaEnvelope className="mr-2 text-white" /> 248huzaifaanwar248@gmail.com</p>
         </div>
 
         {/* Quick Links */}
         <div>
           <h3 className="text-xl font-semibold mb-4">Quick Links</h3>
           <ul className="space-y-2">
-            <NavHashLink smooth to='/#home'>
+            <NavHashLink smooth to="/#home">
               <li className="hover:text-green-200 cursor-pointer transition-colors duration-200">Home</li>
             </NavHashLink>
-            <NavLink smooth to='/medicines'>
+            <NavLink to="/medicines">
               <li className="hover:text-green-200 cursor-pointer transition-colors duration-200">Medicines</li>
             </NavLink>
-            <NavHashLink smooth to='/#about'>
+            <NavHashLink smooth to="/#about">
               <li className="hover:text-green-200 cursor-pointer transition-colors duration-200">About Us</li>
             </NavHashLink>
-            <NavHashLink smooth to='/#contact'>
+            <NavHashLink smooth to="/#contact">
               <li className="hover:text-green-200 cursor-pointer transition-colors duration-200">Contact</li>
             </NavHashLink>
           </ul>
@@ -38,8 +47,18 @@ export default function Footer() {
         <div>
           <h3 className="text-xl font-semibold mb-4">Follow Us</h3>
           <div className="flex space-x-4">
-            <Facebook className="w-6 h-6 hover:text-green-200 cursor-pointer transition-colors duration-200" />
-            <Instagram className="w-6 h-6 hover:text-green-200 cursor-pointer transition-colors duration-200" />
+            <a href="https://facebook.com" target="_blank" rel="noopener noreferrer">
+              <FaFacebookF className="w-6 h-6 hover:text-green-200 cursor-pointer transition-colors duration-200" />
+            </a>
+            <a href="https://instagram.com" target="_blank" rel="noopener noreferrer">
+              <FaInstagram className="w-6 h-6 hover:text-green-200 cursor-pointer transition-colors duration-200" />
+            </a>
+            <a href="https://twitter.com" target="_blank" rel="noopener noreferrer">
+              <FaTwitter className="w-6 h-6 hover:text-green-200 cursor-pointer transition-colors duration-200" />
+            </a>
+            <a href="https://linkedin.com" target="_blank" rel="noopener noreferrer">
+              <FaLinkedinIn className="w-6 h-6 hover:text-green-200 cursor-pointer transition-colors duration-200" />
+            </a>
           </div>
         </div>
 
