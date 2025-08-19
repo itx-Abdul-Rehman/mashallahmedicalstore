@@ -5,7 +5,9 @@ import Footer from "../components/Footer.jsx";
 import Pagination from "../components/Pagination.jsx";
 import SearchBar from "../components/SearchBar.jsx";
 import MedicineCardSkeleton from "../components/MedicineCardSkeleton.jsx";
-import { toast, ToastContainer } from 'react-toastify';
+import { useSelector, useDispatch } from "react-redux";
+import { setCartItem, clearCartItem } from "../redux/Cart/cartItemSlice.js";
+import Cart from "../components/Cart.jsx";
 
 export default function MedicinesPage() {
   const [query, setQuery] = useState("");
@@ -17,6 +19,8 @@ export default function MedicinesPage() {
   const [totalMedicines, setTotalMedicines] = useState(0);
   const [lastDocId, setLastDocId] = useState(null);
   const [isResponse, setIsResponse] = useState(false);
+  const cartItems = useSelector((state) => state.cartItem.value);
+  const dispatch = useDispatch();
 
   const categories = [
     "All",
@@ -67,6 +71,14 @@ export default function MedicinesPage() {
     fetchData();
   }, [currentPage, itemsPerPage, selectedCategory]);
 
+  const handleAddToCart = ({ id, name, image, option, price, quantity }) => {
+    dispatch(setCartItem({ id, name, image, option, price, quantity }));
+
+  }
+
+  const handleAddMore=()=>{
+
+  }
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-100 to-green-100 p-6">
@@ -112,11 +124,13 @@ export default function MedicinesPage() {
                       className="transform hover:-translate-y-2 hover:scale-105 transition-transform duration-300"
                     >
                       <MedicineCard
+                        id={med.id}
                         name={med.name}
                         image={med.image}
                         description={med.description}
                         price={med.price}
                         pricePerStrip={med.pricePerStrip}
+                        onAddToCart={handleAddToCart}
                       />
                     </div>
                   ))
@@ -135,11 +149,13 @@ export default function MedicinesPage() {
                       className="transform hover:-translate-y-2 hover:scale-105 transition-transform duration-300"
                     >
                       <MedicineCard
+                        id={med.id}
                         name={med.name}
                         image={med.image}
                         description={med.description}
                         price={med.price}
                         pricePerStrip={med.pricePerStrip}
+                        onAddToCart={handleAddToCart}
                       />
                     </div>
                   ))
@@ -158,6 +174,8 @@ export default function MedicinesPage() {
           <MedicineCardSkeleton />
         )}
       </main>
+
+      <Cart items={cartItems} onAddMore={handleAddMore} />
 
       {/* Pagination */}
       {query === "" && (

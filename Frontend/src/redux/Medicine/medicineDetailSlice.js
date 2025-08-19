@@ -6,7 +6,7 @@ export const medicineDetailSlice = createSlice({
         value: {
             name: "",
             description: "",
-            category: "",
+            category: "", 
             price:"",
             pricePerStrip: "",
         }

@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { FaTrash, FaEdit, FaCartPlus, FaCheck } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
 
+
 export default function MedicineCard({
   name,
   image,
@@ -12,14 +13,14 @@ export default function MedicineCard({
   isAdmin,
   alertDialog,
   pricePerStrip,
-  onAddToCart, // <- Pass function from parent
+  onAddToCart,
 }) {
   const navigate = useNavigate();
   const [textSize, setTextSize] = useState({ startText: 0, endText: 50 });
   const [isMore, setIsMore] = useState(false);
   const [totalDescriptionSize] = useState(description.length);
   const [added, setAdded] = useState(false);
-  const [selectedOption, setSelectedOption] = useState(""); // Tablet / Strip
+  const [selectedOption, setSelectedOption] = useState(""); 
 
   const onDelete = async () => {
     alertDialog();
@@ -47,18 +48,19 @@ export default function MedicineCard({
       return;
     }
 
-    // if (onAddToCart) {
-    //   onAddToCart({
-    //     id,
-    //     name,
-    //     image,
-    //     option: selectedOption,
-    //     price: selectedOption === "tablet" ? price : pricePerStrip,
-    //   });
-    // }
-
+    if (onAddToCart) {
+      onAddToCart({
+        id,
+        name,
+        image,
+        option: selectedOption,
+        price: selectedOption === "tablet" ? price : pricePerStrip,
+        quantity:1,
+      });
+    }
+    
     setAdded(true);
-    setTimeout(() => setAdded(false), 1500); // reset after 1.5s
+    setTimeout(() => setAdded(false), 1500);
   };
 
   return (
