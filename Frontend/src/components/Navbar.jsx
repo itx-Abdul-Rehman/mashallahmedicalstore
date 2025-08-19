@@ -2,9 +2,11 @@ import React, { useState } from "react";
 import { NavLink } from 'react-router-dom';
 import { HashLink } from "react-router-hash-link";
 import { FiShoppingCart } from "react-icons/fi";
+import { useSelector } from "react-redux";
 
 export default function Navbar() {
     const [menuOpen, setMenuOpen] = useState(false);
+    const cartItems = useSelector((state) => state.cartItem.value);
 
     return (
         <nav className="bg-white shadow-md sticky top-0 z-50">
@@ -34,10 +36,11 @@ export default function Navbar() {
                     <NavLink to="/cart">
                         <li className="relative cursor-pointer">
                             <FiShoppingCart className="text-2xl hover:text-green-500 transition-colors duration-200" />
-                            {/* Example badge */}
-                            <span className="absolute -top-2 -right-2 bg-green-500 text-white text-xs rounded-full px-1">
-                                0
-                            </span>
+                            {cartItems.length > 0 &&
+                                <span className="absolute -top-2 -right-2 bg-green-500 text-white text-xs rounded-full px-1">
+                                    {cartItems.length}
+                                </span>
+                            }
                         </li>
                     </NavLink>
                 </ul>
@@ -68,7 +71,7 @@ export default function Navbar() {
                             <li className="hover:text-green-500 cursor-pointer transition-colors duration-200">Contact</li>
                         </HashLink>
 
-                         {/* Cart in mobile */}
+                        {/* Cart in mobile */}
                         <NavLink to="/cart">
                             <li className="flex items-center space-x-2 hover:text-green-500 cursor-pointer transition-colors duration-200">
                                 <FiShoppingCart className="text-xl" />
