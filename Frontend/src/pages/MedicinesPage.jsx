@@ -7,6 +7,7 @@ import SearchBar from "../components/SearchBar.jsx";
 import MedicineCardSkeleton from "../components/MedicineCardSkeleton.jsx";
 import { useSelector, useDispatch } from "react-redux";
 import { setCartItem, clearCartItem } from "../redux/Cart/cartItemSlice.js";
+import { setShowCart } from "../redux/Cart/showCartSlice.js";
 import Cart from "../components/Cart.jsx";
 
 export default function MedicinesPage() {
@@ -20,6 +21,7 @@ export default function MedicinesPage() {
   const [lastDocId, setLastDocId] = useState(null);
   const [isResponse, setIsResponse] = useState(false);
   const cartItems = useSelector((state) => state.cartItem.value);
+  const showCart = useSelector((state) => state.showCart.value);
   const dispatch = useDispatch();
 
   const categories = [
@@ -76,9 +78,13 @@ export default function MedicinesPage() {
 
   }
 
-  const handleAddMore=()=>{
+  const handleAddMore = () => {
 
   }
+
+  const onCloseCart = () => {
+    dispatch(setShowCart(false));
+  };
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-100 to-green-100 p-6">
@@ -175,7 +181,9 @@ export default function MedicinesPage() {
         )}
       </main>
 
-      <Cart items={cartItems} onAddMore={handleAddMore} />
+      {showCart && (
+        <Cart onAddMore={handleAddMore} onCloseCart={onCloseCart} />
+      )}
 
       {/* Pagination */}
       {query === "" && (

@@ -1,7 +1,8 @@
 import React, { useState } from "react";
 import { FaTrash, FaEdit, FaCartPlus, FaCheck } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
-
+import { useDispatch } from "react-redux";
+import { setShowCart } from "../redux/Cart/showCartSlice";
 
 export default function MedicineCard({
   name,
@@ -16,11 +17,12 @@ export default function MedicineCard({
   onAddToCart,
 }) {
   const navigate = useNavigate();
+  const dispatch = useDispatch();
   const [textSize, setTextSize] = useState({ startText: 0, endText: 50 });
   const [isMore, setIsMore] = useState(false);
   const [totalDescriptionSize] = useState(description.length);
   const [added, setAdded] = useState(false);
-  const [selectedOption, setSelectedOption] = useState(""); 
+  const [selectedOption, setSelectedOption] = useState("tablet");
 
   const onDelete = async () => {
     alertDialog();
@@ -44,7 +46,6 @@ export default function MedicineCard({
 
   const handleAddToCart = () => {
     if (!selectedOption) {
-      alert("Please select Tablet or Strip first!");
       return;
     }
 
@@ -55,11 +56,12 @@ export default function MedicineCard({
         image,
         option: selectedOption,
         price: selectedOption === "tablet" ? price : pricePerStrip,
-        quantity:1,
+        quantity: 1,
       });
     }
-    
+
     setAdded(true);
+    dispatch(setShowCart(true));
     setTimeout(() => setAdded(false), 1500);
   };
 
@@ -67,6 +69,7 @@ export default function MedicineCard({
     <div className="relative bg-gradient-to-b from-white to-gray-50 rounded-2xl shadow-md p-5 flex flex-col items-center 
                     hover:shadow-xl hover:-translate-y-2 transition-all duration-300 ease-out cursor-pointer 
                     border border-transparent hover:border-green-400">
+    
       {/* Image */}
       <div className="overflow-hidden rounded-xl w-36 h-36 mb-4">
         <img
@@ -121,6 +124,7 @@ export default function MedicineCard({
             checked={selectedOption === "tablet"}
             onChange={(e) => setSelectedOption(e.target.value)}
             className="text-green-600 focus:ring-green-500 accent-green-600"
+
           />
           <span className="text-gray-800 text-sm">
             1 Tablet = <b>Rs. {price}</b>
