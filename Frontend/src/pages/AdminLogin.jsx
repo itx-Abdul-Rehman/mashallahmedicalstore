@@ -52,7 +52,7 @@ export default function AdminLogin() {
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify(formData),
             });
-
+           console.log(`${import.meta.env.VITE_BACKEND_URL}/admin/login`);
             setIsResponse(true);
             const result = await response.json();
 
