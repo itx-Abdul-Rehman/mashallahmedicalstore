@@ -9,6 +9,8 @@ import { useSelector, useDispatch } from "react-redux";
 import { setCartItem, clearCartItem } from "../redux/Cart/cartItemSlice.js";
 import { setShowCart } from "../redux/Cart/showCartSlice.js";
 import Cart from "../components/Cart.jsx";
+import { useNavigate } from "react-router-dom";
+import Checkout from "../components/Checkout.jsx";
 
 export default function MedicinesPage() {
   const [query, setQuery] = useState("");
@@ -20,9 +22,11 @@ export default function MedicinesPage() {
   const [totalMedicines, setTotalMedicines] = useState(0);
   const [lastDocId, setLastDocId] = useState(null);
   const [isResponse, setIsResponse] = useState(false);
+  const [currentStep,setCurrentStep]=useState('cart')
   const cartItems = useSelector((state) => state.cartItem.value);
   const showCart = useSelector((state) => state.showCart.value);
   const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   const categories = [
     "All",
@@ -79,12 +83,25 @@ export default function MedicinesPage() {
   }
 
   const handleAddMore = () => {
-
+    dispatch(setShowCart(false));
+    navigate('/medicines');
   }
 
   const onCloseCart = () => {
     dispatch(setShowCart(false));
   };
+
+  const onConfirmPayment=()=>{
+    setCurrentStep('checkout')
+  }
+
+  const onPlaceOrder=(orderDetails)=>{
+     console.log(orderDetails);
+  }
+
+  const onBack=()=>{
+    setCurrentStep('cart')
+  }
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-100 to-green-100 p-6">
@@ -181,8 +198,12 @@ export default function MedicinesPage() {
         )}
       </main>
 
-      {showCart && (
-        <Cart onAddMore={handleAddMore} onCloseCart={onCloseCart} />
+      {(showCart && currentStep==='cart') && (
+        <Cart onAddMore={handleAddMore} onCloseCart={onCloseCart} onConfirmPayment={onConfirmPayment} />
+      )}
+
+      {(showCart && currentStep==='checkout') && (
+        <Checkout onPlaceOrder={onPlaceOrder} onBack={onBack} />
       )}
 
       {/* Pagination */}

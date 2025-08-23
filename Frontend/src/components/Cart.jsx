@@ -4,10 +4,12 @@ import { useSelector, useDispatch } from "react-redux";
 import { setQuantity, clearCartItem, removeCartItem } from "../redux/Cart/cartItemSlice.js";
 import { useNavigate } from "react-router-dom";
 
-export default function Cart({ onAddMore, onCloseCart }) {
+
+export default function Cart({ onAddMore, onCloseCart, onConfirmPayment }) {
     const cartItems = useSelector((state) => state.cartItem.value);
+    const showCart = useSelector((state) => state.showCart.value);
     const dispatch = useDispatch();
-    const navigate=useNavigate();
+    const navigate = useNavigate();
     const [totalPrice, setTotalPrice] = useState(0);
 
     useEffect(() => {
@@ -50,22 +52,25 @@ export default function Cart({ onAddMore, onCloseCart }) {
         onCloseCart()
     };
 
-    const handleBrowseProduct=()=>{
+    const handleBrowseProduct = () => {
         onCloseCart();
-       navigate("/medicines");
+        navigate("/medicines");
     }
 
     return (
-        <div className="fixed top-0 sm:top-2 right-0  z-50 p-4 h-full sm:p-5 bg-gradient-to-b from-white to-gray-50 sm:rounded-tl-2xl shadow-md space-y-4 border border-transparent hover:border-green-400 transition w-full max-w-xl">
+        <div
+            className={`fixed top-0 sm:top-2 right-0 z-50 p-4 h-full sm:p-5 bg-gradient-to-b from-white to-gray-50 sm:rounded-tl-2xl shadow-md space-y-4 border border-transparent hover:border-green-400 transition-transform duration-500 ease-in-out w-full max-w-xl
+  ${showCart ? "translate-x-0" : "translate-x-full"}`}
+        >
             <div className="flex gap-2 items-center ">
                 <h2 className="text-xl sm:text-2xl font-bold mb-2 text-gray-800">🛒 Your Cart - </h2>
-                 
+
                 <h3 className="text-lg sm:text-xl font-semibold mb-2 text-gray-800">{cartItems.length} Items</h3>
             </div>
 
             {/* Close Cart Button */}
             <div
-                className="absolute top-1 right-3 cursor-pointer rounded-full hover:bg-gray-100 p-1 transition-all"
+                className="absolute top-1 right-3 cursor-pointer rounded-full hover:bg-gray-50 p-1 transition-all"
                 onClick={handleOnClose}
             >
                 <FaTimes size={20} />
@@ -74,7 +79,7 @@ export default function Cart({ onAddMore, onCloseCart }) {
             {cartItems.length !== 0 ? (
                 <>
                     {/* Cart Items */}
-                    <div className="flex flex-col gap-4 overflow-y-scroll h-[63%]">
+                    <div className="flex flex-col gap-4 overflow-y-auto scrollbar-hide h-[63%]">
                         {cartItems.map((item, index) => (
                             <div
                                 key={index}
@@ -143,7 +148,7 @@ export default function Cart({ onAddMore, onCloseCart }) {
                     </div>
 
                     {/* Confirm Payment */}
-                    <div className="absolute bottom-4 left-0 right-0 mx-auto w-[80%]">
+                    <div onClick={onConfirmPayment} className="absolute bottom-4 left-0 right-0 mx-auto w-[80%]">
                         <button className="w-full bg-green-600 text-white py-3 rounded-xl font-medium hover:bg-green-700 transition-all transform hover:scale-105">
                             Confirm payment and address
                         </button>

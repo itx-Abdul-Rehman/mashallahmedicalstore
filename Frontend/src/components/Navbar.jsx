@@ -77,12 +77,11 @@ export default function Navbar() {
                         </HashLink>
 
                         {/* Cart in mobile */}
-                        <NavLink to="/cart">
-                            <li className="flex items-center space-x-2 hover:text-green-500 cursor-pointer transition-colors duration-200">
+                            <li onClick={handleCart} className="flex items-center space-x-2 hover:text-green-500 cursor-pointer transition-colors duration-200">
                                 <FiShoppingCart className="text-xl" />
                                 <span>Cart</span>
                             </li>
-                        </NavLink>
+                       
                     </ul>
                 </div>
             )}
