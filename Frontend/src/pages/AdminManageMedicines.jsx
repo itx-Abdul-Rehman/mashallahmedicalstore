@@ -44,13 +44,13 @@ export default function AdminManageMedicines() {
         dispatch(clearMedicine());
     }, [])
 
-     useEffect(()=>{
+    useEffect(() => {
         const token = localStorage.getItem("adminToken");
-    
+
         if (!token) {
-          navigate("/admin/login");
+            navigate("/admin/login");
         }
-      }, []);
+    }, []);
 
 
     useEffect(() => {
@@ -113,7 +113,7 @@ export default function AdminManageMedicines() {
                 }, 1000);
             } else {
                 toast.error(result.message);
-                if(response.status === 401) {
+                if (response.status === 401) {
                     localStorage.removeItem("adminToken");
                     navigate("/admin/login");
                 }
@@ -143,7 +143,13 @@ export default function AdminManageMedicines() {
             <ToastContainer />
             <DialogBox open={open} handleClose={setOpen} handleDelete={handleDelete} deleteMedicine={deleteMedicine} />
 
-            <FaArrowLeft color="16a34a" className="cursor-pointer fixed z-50" onClick={onBack} />
+            {/* Back Button */}
+            <button
+                onClick={onBack}
+                className="fixed top-5 left-5 z-50 bg-white shadow-md rounded-full p-3 hover:bg-green-100 transition"
+            >
+                <FaArrowLeft className="text-green-600 text-lg" />
+            </button>
 
             {/* Page Title */}
             <h1 className="mt-10 text-3xl md:text-4xl font-bold text-green-600 mb-6 text-center animate-pulse">
@@ -151,8 +157,8 @@ export default function AdminManageMedicines() {
             </h1>
 
             {/* Search Bar */}
-            <SearchBar query={query} setQuery={setQuery} 
-            setSearchData={setSearchData} setIsResponse={setIsResponse} />
+            <SearchBar query={query} setQuery={setQuery}
+                setSearchData={setSearchData} setIsResponse={setIsResponse} />
 
             {/* Category Filters */}
             {query === "" && (
@@ -174,68 +180,68 @@ export default function AdminManageMedicines() {
 
             {/* Medicines Grid */}
             <main className="mt-10 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8">
-               {isResponse ?(
-                <>
-                    {query === "" ? (
-                        <>
-                            {medicinesData.length > 0 ? (
-                                medicinesData.map((med, idx) => (
-                                    <div
-                                        key={idx}
-                                        className="transform hover:-translate-y-2 hover:scale-105 transition-transform duration-300"
-                                    >
-                                        <MedicineCard
-                                            name={med.name}
-                                            image={med.image}
-                                            description={med.description}
-                                            price={med.price}
-                                            id={med.id}
-                                            category={med.category}
-                                            pricePerStrip={med.pricePerStrip}
-                                            isAdmin={isAdmin}
-                                            alertDialog={() => alertDialog(idx)}
-                                            index={idx}
-                                        />
-                                    </div>
-                                ))
-                            ) : (
-                                <p className="text-center text-gray-600 col-span-full animate-pulse text-xl">
-                                    No medicines found.
-                                </p>
-                            )}
-                        </>
-                    ) : (
-                        <>
-                            {searchData.length > 0 ? (
-                                searchData.map((med, idx) => (
-                                    <div
-                                        key={idx}
-                                        className="transform hover:-translate-y-2 hover:scale-105 transition-transform duration-300"
-                                    >
-                                        <MedicineCard
-                                            name={med.name}
-                                            image={med.image}
-                                            description={med.description}
-                                            price={med.price}
-                                            id={med.id}
-                                            category={med.category}
-                                            pricePerStrip={med.pricePerStrip}
-                                            isAdmin={isAdmin}
-                                            alertDialog={() => alertDialog(idx)}
+                {isResponse ? (
+                    <>
+                        {query === "" ? (
+                            <>
+                                {medicinesData.length > 0 ? (
+                                    medicinesData.map((med, idx) => (
+                                        <div
+                                            key={idx}
+                                            className="transform hover:-translate-y-2 hover:scale-105 transition-transform duration-300"
+                                        >
+                                            <MedicineCard
+                                                name={med.name}
+                                                image={med.image}
+                                                description={med.description}
+                                                price={med.price}
+                                                id={med.id}
+                                                category={med.category}
+                                                pricePerStrip={med.pricePerStrip}
+                                                isAdmin={isAdmin}
+                                                alertDialog={() => alertDialog(idx)}
+                                                index={idx}
+                                            />
+                                        </div>
+                                    ))
+                                ) : (
+                                    <p className="text-center text-gray-600 col-span-full animate-pulse text-xl">
+                                        No medicines found.
+                                    </p>
+                                )}
+                            </>
+                        ) : (
+                            <>
+                                {searchData.length > 0 ? (
+                                    searchData.map((med, idx) => (
+                                        <div
+                                            key={idx}
+                                            className="transform hover:-translate-y-2 hover:scale-105 transition-transform duration-300"
+                                        >
+                                            <MedicineCard
+                                                name={med.name}
+                                                image={med.image}
+                                                description={med.description}
+                                                price={med.price}
+                                                id={med.id}
+                                                category={med.category}
+                                                pricePerStrip={med.pricePerStrip}
+                                                isAdmin={isAdmin}
+                                                alertDialog={() => alertDialog(idx)}
 
-                                        />
+                                            />
+                                        </div>
+                                    ))
+                                ) : (
+                                    <div className="text-center text-gray-600 col-span-full animate-pulse text-xl">
+                                        Nothing found for "{query}".
+                                        <hr className="border-t border-green-600 w-1/2 sm:w-1/3 md:w-1/4 mx-auto my-2" />
                                     </div>
-                                ))
-                            ) : (
-                                <div className="text-center text-gray-600 col-span-full animate-pulse text-xl">
-                                    Nothing found for "{query}".
-                                    <hr className="border-t border-green-600 w-1/2 sm:w-1/3 md:w-1/4 mx-auto my-2" />
-                                </div>
-                            )}
-                        </>
-                    )}
-                </>
-                ):(<MedicineCardSkeleton />)}
+                                )}
+                            </>
+                        )}
+                    </>
+                ) : (<MedicineCardSkeleton />)}
             </main>
 
             {/* Pagination */}

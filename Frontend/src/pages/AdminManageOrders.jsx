@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
-import { FaArrowLeft } from "react-icons/fa";
+import { motion } from "framer-motion";
+import { FaArrowLeft, FaCheck, FaTruck, FaBoxOpen } from "react-icons/fa";
 import { toast, ToastContainer } from "react-toastify";
 import { useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
@@ -53,98 +54,116 @@ export default function AdminManageOrders() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-100 to-green-100 p-6">
+    <div className="min-h-screen bg-gradient-to-br from-blue-50 to-green-50 p-6">
       <ToastContainer />
-      <FaArrowLeft color="16a34a" className="cursor-pointer fixed z-50" onClick={onBack} />
+
+      {/* Back Button */}
+      <button
+        onClick={onBack}
+        className="fixed top-5 left-5 z-50 bg-white shadow-md rounded-full p-3 hover:bg-green-100 transition"
+      >
+        <FaArrowLeft className="text-green-600 text-lg" />
+      </button>
 
       {/* Page Title */}
-      <h1 className="mt-10 text-3xl md:text-4xl font-bold text-green-600 mb-6 text-center animate-pulse">
+      <h1 className="mt-12 text-3xl md:text-4xl font-bold text-green-600 mb-8 text-center">
         Manage Orders
       </h1>
 
       {/* Orders Grid */}
-      <main className="mt-10 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+      <main className="mt-6 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
         {isResponse ? (
           <>
             {orders.length > 0 ? (
               orders.map((order) => (
-                <div
+                <motion.div
                   key={order.id}
-                  className="bg-white rounded-xl shadow-md p-5 hover:shadow-lg transition"
+                  initial={{ opacity: 0, scale: 0.9 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  whileHover={{ scale: 1.03 }}
+                  transition={{ duration: 0.2 }}
+                  className="bg-white rounded-2xl shadow-md p-6 hover:shadow-xl border-t-4 border-green-400"
                 >
-                  <h2 className="text-lg font-bold text-green-700">
-                    Order #{order.id.slice(0, 6).toUpperCase()}
-                  </h2>
-                  <p className="text-sm text-gray-600">
-                    
-                    Total: Rs {order.totalAmount} <br />
-                    Status: {order.orderStatus} <br />
-                    Phone No: {order.phone} <br />
-                    Address: {order.address} <br />
+                  {/* Header */}
+                  <div className="flex justify-between items-center mb-3">
+                    <h2 className="text-lg font-bold text-green-700">
+                      Order #{order.id.slice(0, 6).toUpperCase()}
+                    </h2>
                     <span
-                      className={`font-semibold ${
-                        order.status === "pending"
-                          ? "text-yellow-600"
-                          : order.status === "confirmed"
-                          ? "text-blue-600"
-                          : order.status === "shipped"
-                          ? "text-purple-600"
-                          : "text-green-600"
+                      className={`px-3 py-1 rounded-full text-xs font-semibold ${
+                        order.orderStatus === "pending"
+                          ? "bg-yellow-100 text-yellow-600"
+                          : order.orderStatus === "confirmed"
+                          ? "bg-blue-100 text-blue-600"
+                          : order.orderStatus === "shipped"
+                          ? "bg-purple-100 text-purple-600"
+                          : "bg-green-100 text-green-600"
                       }`}
                     >
-                      {order.status}
+                      {order.orderStatus}
                     </span>
+                  </div>
+
+                  {/* Order Details */}
+                  <p className="text-sm text-gray-600 leading-6">
+                    <strong>Total Amount:</strong> Rs {order.totalAmount} <br />
+                    <strong>Phone:</strong> {order.phone} <br />
+                    <strong>Address:</strong> {order.address}
                   </p>
 
                   {/* Items */}
-                  <div className="mt-3">
-                    <p className="font-medium">Items:</p>
-                    <ul className="list-disc list-inside text-sm text-gray-700">
+                  <details className="mt-4">
+                    <summary className="cursor-pointer font-medium text-gray-700 hover:text-green-600">
+                      View Items
+                    </summary>
+                    <ul className="list-disc list-inside text-sm text-gray-700 mt-2 space-y-1">
                       {order.items.map((item, idx) => (
                         <li key={idx}>
-                          {item.name} {item.option} - {item.quantity} x Rs {item.price}
+                          {item.name} <b>({item.option.slice(0,1).toUpperCase()+item.option.slice(1)})</b> - {item.quantity} × Rs {item.price}
                         </li>
                       ))}
                     </ul>
-                  </div>
+                  </details>
 
                   {/* Action buttons */}
-                  <div className="mt-4 flex gap-2">
-                    {order.status !== "confirmed" && (
+                  <div className="mt-5 flex gap-2 flex-wrap">
+                    {order.orderStatus !== "confirmed" && (
                       <button
                         onClick={() => updateStatus(order.id, "confirmed")}
-                        className="px-3 py-1 bg-blue-500 text-white rounded-full"
+                        className="flex items-center gap-2 px-3 py-1.5 bg-blue-500 hover:bg-blue-600 text-white rounded-full text-sm transition"
                       >
-                        Confirm
+                        <FaCheck /> Confirm
                       </button>
                     )}
-                    {order.status !== "shipped" && order.status !== "delivered" && (
+                    {order.orderStatus !== "shipped" && order.orderStatus !== "delivered" && (
                       <button
                         onClick={() => updateStatus(order.id, "shipped")}
-                        className="px-3 py-1 bg-purple-500 text-white rounded-full"
+                        className="flex items-center gap-2 px-3 py-1.5 bg-purple-500 hover:bg-purple-600 text-white rounded-full text-sm transition"
                       >
-                        Ship
+                        <FaTruck /> Ship
                       </button>
                     )}
-                    {order.status !== "delivered" && (
+                    {order.orderStatus !== "delivered" && (
                       <button
                         onClick={() => updateStatus(order.id, "delivered")}
-                        className="px-3 py-1 bg-green-500 text-white rounded-full"
+                        className="flex items-center gap-2 px-3 py-1.5 bg-green-500 hover:bg-green-600 text-white rounded-full text-sm transition"
                       >
-                        Deliver
+                        <FaBoxOpen /> Deliver
                       </button>
                     )}
                   </div>
-                </div>
+                </motion.div>
               ))
             ) : (
-              <p className="text-center text-gray-600 col-span-full animate-pulse text-xl">
-                No orders yet.
+              <p className="text-center text-gray-500 col-span-full animate-pulse text-lg">
+                No orders yet 🚀
               </p>
             )}
           </>
         ) : (
-          <p className="text-center text-gray-600 col-span-full">Loading orders...</p>
+          <p className="text-center text-gray-600 col-span-full animate-bounce">
+            Loading orders...
+          </p>
         )}
       </main>
     </div>
