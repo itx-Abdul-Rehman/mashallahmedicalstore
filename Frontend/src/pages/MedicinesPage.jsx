@@ -11,6 +11,8 @@ import { setShowCart } from "../redux/Cart/showCartSlice.js";
 import Cart from "../components/Cart.jsx";
 import { useNavigate } from "react-router-dom";
 import Checkout from "../components/Checkout.jsx";
+import { toast, ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 export default function MedicinesPage() {
   const [query, setQuery] = useState("");
@@ -22,7 +24,8 @@ export default function MedicinesPage() {
   const [totalMedicines, setTotalMedicines] = useState(0);
   const [lastDocId, setLastDocId] = useState(null);
   const [isResponse, setIsResponse] = useState(false);
-  const [currentStep,setCurrentStep]=useState('cart')
+  const [currentStep, setCurrentStep] = useState('cart')
+  const [placedOrderResponse, setPlacedOrderResponse] = useState(true);
   const cartItems = useSelector((state) => state.cartItem.value);
   const showCart = useSelector((state) => state.showCart.value);
   const dispatch = useDispatch();
@@ -91,22 +94,43 @@ export default function MedicinesPage() {
     dispatch(setShowCart(false));
   };
 
-  const onConfirmPayment=()=>{
+  const onConfirmPayment = () => {
     setCurrentStep('checkout')
   }
 
-  const onPlaceOrder=(orderDetails)=>{
-     console.log(orderDetails);
+  const onPlaceOrder = async (orderDetails) => {
+    try {
+      setPlacedOrderResponse(false)
+      const response = await fetch(`${import.meta.env.VITE_BACKEND_URL}/place-order`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(orderDetails),
+      });
+      setPlacedOrderResponse(true);
+      const result = await response.json();
+      if (result.success) {
+        dispatch(clearCartItem());
+        dispatch(setShowCart(false));
+        setCurrentStep('cart');
+        toast.success(result.message || 'Order placed successfully');
+      } else {
+        toast.error(result.message || 'Failed to place order');
+      }
+    } catch (error) {
+      toast.error('Failed to place order');
+    }
   }
 
-  const onBack=()=>{
+  const onBack = () => {
     setCurrentStep('cart')
   }
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-100 to-green-100 p-6">
       <Navbar />
-
+      <ToastContainer />
       {/* Page Title */}
       <h1 className="mt-10 text-3xl md:text-4xl font-bold text-green-600 mb-6 text-center animate-pulse">
         Our Medicines
@@ -198,12 +222,13 @@ export default function MedicinesPage() {
         )}
       </main>
 
-      {(showCart && currentStep==='cart') && (
+      {(showCart && currentStep === 'cart') && (
         <Cart onAddMore={handleAddMore} onCloseCart={onCloseCart} onConfirmPayment={onConfirmPayment} />
       )}
 
-      {(showCart && currentStep==='checkout') && (
-        <Checkout onPlaceOrder={onPlaceOrder} onBack={onBack} />
+      {(showCart && currentStep === 'checkout') && (
+        <Checkout onPlaceOrder={onPlaceOrder} onBack={onBack} 
+        placedOrderResponse={placedOrderResponse} />
       )}
 
       {/* Pagination */}

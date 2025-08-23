@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from "react";
 import { useSelector } from "react-redux";
 import { FaMapMarkerAlt, FaPhone, FaMoneyBillWave, FaListAlt , FaArrowLeft} from "react-icons/fa";
+import LoadingButtons from "./LoadingButton";
 
-export default function Checkout({ onPlaceOrder, onBack }) {
+export default function Checkout({ onPlaceOrder, onBack, placedOrderResponse }) {
   const cartItems = useSelector((state) => state.cartItem.value);
   const [subtotal, setSubtotal] = useState(0);
   const [address, setAddress] = useState("");
@@ -155,16 +156,18 @@ export default function Checkout({ onPlaceOrder, onBack }) {
 
       {/* Fixed Footer */}
       <div className="bg-white w-full p-4 rounded-tr-xl rounded-tl-xl shadow-lg border border-transparent">
-        <p className="flex justify-between font-bold text-gray-800">
+        <p className="flex justify-between font-bold text-gray-800 mb-3">
           <span>Total (incl. fees and tax)</span>
           <span className="text-green-600">Rs. {totalAmount.toFixed(2)}</span>
         </p>
+        {placedOrderResponse ?(
         <button
           onClick={handlePlaceOrder}
           className="w-full bg-green-600 text-white py-3 rounded-xl font-medium hover:bg-green-700 transition-all transform hover:scale-105"
         >
           Place Order
         </button>
+        ): (<LoadingButtons text="Placing Order"/>)}
       </div>
     </div>
 
