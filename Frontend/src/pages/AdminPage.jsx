@@ -37,6 +37,12 @@ export default function AdminPage() {
               <p className="text-gray-700">Edit or delete existing medicines.</p>
             </div>
           </NavLink>
+           <NavLink  to="/admin/manage/orders">
+            <div className="bg-white p-6 rounded-lg shadow-lg text-center cursor-pointer hover:scale-105 transition-transform">
+              <h2 className="font-bold text-lg text-green-600 mb-2">Manage Orders</h2>
+              <p className="text-gray-700">View and manage customer orders.</p>
+            </div>
+          </NavLink>
         </div>
       </div>
     </div>

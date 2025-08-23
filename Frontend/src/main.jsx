@@ -13,6 +13,7 @@ import UpdateMedicine from './pages/UpdateMedicine.jsx';
 import AdminLogin from './pages/AdminLogin.jsx';
 import AdminSignup from './pages/AdminSignup.jsx';
 import ResetPassword from './pages/ResetPassword.jsx';
+import AdminManageOrders from './pages/AdminManageOrders.jsx';
 
 ReactDOM.render(
   <React.StrictMode>
@@ -28,6 +29,7 @@ ReactDOM.render(
           <Route path='/admin/login' element={<AdminLogin />} />
           <Route path='/admin/signup' element={<AdminSignup />} />
           <Route path='/admin/reset' element={<ResetPassword />} />
+          <Route path='/admin/manage/orders' element={<AdminManageOrders />} />
         </Routes>
       </BrowserRouter>
     </Provider>
