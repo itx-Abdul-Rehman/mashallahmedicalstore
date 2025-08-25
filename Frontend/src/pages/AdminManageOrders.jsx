@@ -77,12 +77,12 @@ export default function AdminManageOrders() {
       </button>
 
       {/* Page Title */}
-      <h1 className="mt-12 text-3xl md:text-4xl font-bold text-green-600 mb-6 text-center">
+      <h1 className="mt-8 text-3xl md:text-4xl font-bold text-green-600 mb-6 text-center">
         Manage Orders
       </h1>
 
       {/* Filter Buttons */}
-      <div className="sticky top-0 left-0 right-0 z-50 flex justify-center gap-4  flex-wrap">
+      <div className="sticky top-0 left-0 right-0  flex justify-center gap-4  flex-wrap">
         <button
           onClick={() => setFilter("all")}
           className={`flex items-center gap-2 px-4 py-2 rounded-full font-semibold text-sm shadow-md transition ${filter === "all" ? "bg-green-500 text-white" : "bg-white text-green-600 hover:bg-green-100"

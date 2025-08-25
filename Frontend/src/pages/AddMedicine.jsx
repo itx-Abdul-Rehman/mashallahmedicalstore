@@ -27,6 +27,9 @@ export default function AddMedicine() {
         "Anti-inflammatory",
         "Supplement",
         "Epilepsy/Anxiety",
+        "Syrup",
+        "Injection",
+        "Others",
     ];
 
     useEffect(() => {
@@ -284,3 +287,4 @@ export default function AddMedicine() {
         </div>
     );
 }
+

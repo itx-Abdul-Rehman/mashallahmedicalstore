@@ -29,6 +29,9 @@ export default function UpdateMedicine() {
         "Anti-inflammatory",
         "Supplement",
         "Epilepsy/Anxiety",
+        "Syrup",
+        "Injection",
+        "Others",
     ];
 
     useEffect(() => {

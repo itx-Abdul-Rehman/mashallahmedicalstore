@@ -37,6 +37,9 @@ export default function AdminManageMedicines() {
         "Anti-inflammatory",
         "Supplement",
         "Epilepsy/Anxiety",
+        "Syrup",
+        "Injection",
+        "Others",
     ];
 
 

@@ -42,6 +42,9 @@ export default function MedicinesPage() {
     "Anti-inflammatory",
     "Supplement",
     "Epilepsy/Anxiety",
+    "Syrup",
+    "Injection",
+    "Others",
   ];
 
 

@@ -77,9 +77,14 @@ export default function Navbar() {
                         </HashLink>
 
                         {/* Cart in mobile */}
-                            <li onClick={handleCart} className="flex items-center space-x-2 hover:text-green-500 cursor-pointer transition-colors duration-200">
+                            <li onClick={handleCart} className="relative flex items-center space-x-2 hover:text-green-500 cursor-pointer transition-colors duration-200">
                                 <FiShoppingCart className="text-xl" />
                                 <span>Cart</span>
+                                {cartItems.length > 0 && (
+                                    <span className="absolute -top-2 left-2 bg-green-500 text-white text-xs rounded-full px-1">
+                                        {cartItems.length}
+                                    </span>
+                                )}
                             </li>
                        
                     </ul>
