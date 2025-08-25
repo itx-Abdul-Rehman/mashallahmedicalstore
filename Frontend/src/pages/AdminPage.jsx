@@ -23,14 +23,13 @@ export default function AdminPage() {
           Admin Dashboard
         </h1>
 
-        <button
-          onClick={() => navigate("/admin/add")}
-          className="mb-6 bg-green-500 hover:bg-green-600 text-white font-bold px-6 py-3 rounded-lg transition-all duration-300"
-        >
-          Add New Medicine
-        </button>
-
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+           <NavLink  to="/admin/add">
+            <div className="bg-white p-6 rounded-lg shadow-lg text-center cursor-pointer hover:scale-105 transition-transform">
+              <h2 className="font-bold text-lg text-green-600 mb-2">Add New Medicine</h2>
+              <p className="text-gray-700">Add a new medicine to the inventory.</p>
+            </div>
+          </NavLink>
           <NavLink  to="/admin/manage">
             <div className="bg-white p-6 rounded-lg shadow-lg text-center cursor-pointer hover:scale-105 transition-transform">
               <h2 className="font-bold text-lg text-green-600 mb-2">Manage Medicines</h2>

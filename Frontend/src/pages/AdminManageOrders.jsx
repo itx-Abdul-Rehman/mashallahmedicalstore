@@ -1,20 +1,22 @@
 import React, { useEffect, useState } from "react";
 import { motion } from "framer-motion";
-import { FaArrowLeft, FaCheck, FaTruck, FaBoxOpen } from "react-icons/fa";
+import { FaArrowLeft, FaClipboardList, FaCheckCircle, FaTimesCircle, FaClock } from "react-icons/fa";
 import { toast, ToastContainer } from "react-toastify";
 import { useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { clearMedicine } from "../redux/Medicine/medicineDetailSlice.js";
-import { onSnapshot, collection, query, orderBy, updateDoc, doc } from "firebase/firestore";
+import { onSnapshot, collection, query, orderBy, doc, updateDoc } from "firebase/firestore";
 import { database } from "../Database-Connection/Firebase.js";
 
 export default function AdminManageOrders() {
   const [orders, setOrders] = useState([]);
   const [isResponse, setIsResponse] = useState(true);
+  const [filter, setFilter] = useState("pending");
+  const [filteredOrders, setFilteredOrders] = useState([]);
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
-  // Go back button
+ 
   const onBack = () => {
     dispatch(clearMedicine());
     navigate("/admin");
@@ -42,14 +44,23 @@ export default function AdminManageOrders() {
     return () => unsubscribe();
   }, []);
 
-  // Update order status
-  const updateStatus = async (orderId, status) => {
+  // Apply filter
+  useEffect(()=>{
+    const filteredOrders=filter==="all"?orders:orders.filter((order)=>(
+      order.orderStatus===filter
+    ))
+
+    setFilteredOrders(filteredOrders);
+
+  },[filter,orders])
+
+  const handleUpdateStatus = async (orderId, newStatus) => {
     try {
       const orderRef = doc(database, "orders", orderId);
-      await updateDoc(orderRef, { status, updatedAt: new Date() });
-      toast.success(`Order marked as ${status}`);
+      await updateDoc(orderRef, { orderStatus: newStatus });
+      toast.success(`Order ${newStatus} successfully!`);
     } catch (error) {
-      toast.error("Failed to update status");
+      toast.error("Failed to update order status");
     }
   };
 
@@ -66,16 +77,48 @@ export default function AdminManageOrders() {
       </button>
 
       {/* Page Title */}
-      <h1 className="mt-12 text-3xl md:text-4xl font-bold text-green-600 mb-8 text-center">
+      <h1 className="mt-12 text-3xl md:text-4xl font-bold text-green-600 mb-6 text-center">
         Manage Orders
       </h1>
+
+      {/* Filter Buttons */}
+      <div className="sticky top-0 left-0 right-0 z-50 flex justify-center gap-4  flex-wrap">
+        <button
+          onClick={() => setFilter("all")}
+          className={`flex items-center gap-2 px-4 py-2 rounded-full font-semibold text-sm shadow-md transition ${filter === "all" ? "bg-green-500 text-white" : "bg-white text-green-600 hover:bg-green-100"
+            }`}
+        >
+          <FaClipboardList /> All
+        </button>
+        <button
+          onClick={() => setFilter("pending")}
+          className={`flex items-center gap-2 px-4 py-2 rounded-full font-semibold text-sm shadow-md transition ${filter === "pending" ? "bg-yellow-500 text-white" : "bg-white text-yellow-600 hover:bg-yellow-100"
+            }`}
+        >
+          <FaClock /> Pending
+        </button>
+        <button
+          onClick={() => setFilter("delivered")}
+          className={`flex items-center gap-2 px-4 py-2 rounded-full font-semibold text-sm shadow-md transition ${filter === "delivered" ? "bg-green-500 text-white" : "bg-white text-green-600 hover:bg-green-100"
+            }`}
+        >
+          <FaCheckCircle /> Delivered
+        </button>
+        <button
+          onClick={() => setFilter("cancelled")}
+          className={`flex items-center gap-2 px-4 py-2 rounded-full font-semibold text-sm shadow-md transition ${filter === "cancelled" ? "bg-red-500 text-white" : "bg-white text-red-600 hover:bg-red-100"
+            }`}
+        >
+          <FaTimesCircle /> Cancelled
+        </button>
+      </div>
 
       {/* Orders Grid */}
       <main className="mt-6 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
         {isResponse ? (
           <>
-            {orders.length > 0 ? (
-              orders.map((order) => (
+            {filteredOrders.length > 0 ? (
+              filteredOrders.map((order) => (
                 <motion.div
                   key={order.id}
                   initial={{ opacity: 0, scale: 0.9 }}
@@ -86,19 +129,25 @@ export default function AdminManageOrders() {
                 >
                   {/* Header */}
                   <div className="flex justify-between items-center mb-3">
-                    <h2 className="text-lg font-bold text-green-700">
-                      Order #{order.id.slice(0, 6).toUpperCase()}
-                    </h2>
+                    <span>
+                      <h2 className="text-lg font-bold text-green-700">
+                        Order #{order.id.slice(0, 6).toUpperCase()}
+                      </h2>
+                      <p className="text-sm text-gray-600">{order.createdAt.toDate().getHours() + ':' + order.createdAt.toDate().getMinutes()}&nbsp;&nbsp;{order.createdAt.toDate().toDateString()}</p>
+                    </span>
                     <span
-                      className={`px-3 py-1 rounded-full text-xs font-semibold ${
-                        order.orderStatus === "pending"
-                          ? "bg-yellow-100 text-yellow-600"
-                          : order.orderStatus === "confirmed"
+                      className={`px-3 py-1 rounded-full text-xs font-semibold capitalize ${order.orderStatus === "pending"
+                        ? "bg-yellow-100 text-yellow-600"
+                        : order.orderStatus === "confirmed"
                           ? "bg-blue-100 text-blue-600"
                           : order.orderStatus === "shipped"
-                          ? "bg-purple-100 text-purple-600"
-                          : "bg-green-100 text-green-600"
-                      }`}
+                            ? "bg-purple-100 text-purple-600"
+                            : order.orderStatus === "delivered"
+                              ? "bg-green-100 text-green-600"
+                              : order.orderStatus === "cancelled"
+                                ? "bg-red-100 text-red-600"
+                                : "bg-gray-100 text-gray-600"
+                        }`}
                     >
                       {order.orderStatus}
                     </span>
@@ -119,44 +168,54 @@ export default function AdminManageOrders() {
                     <ul className="list-disc list-inside text-sm text-gray-700 mt-2 space-y-1">
                       {order.items.map((item, idx) => (
                         <li key={idx}>
-                          {item.name} <b>({item.option.slice(0,1).toUpperCase()+item.option.slice(1)})</b> - {item.quantity} × Rs {item.price}
+                          {item.name}{" "}
+                          <b>
+                            (
+                            {item.option.slice(0, 1).toUpperCase() +
+                              item.option.slice(1)}
+                            )
+                          </b>{" "}
+                          - {item.quantity} × Rs {item.price}
                         </li>
                       ))}
                     </ul>
                   </details>
 
-                  {/* Action buttons */}
-                  <div className="mt-5 flex gap-2 flex-wrap">
-                    {order.orderStatus !== "confirmed" && (
-                      <button
-                        onClick={() => updateStatus(order.id, "confirmed")}
-                        className="flex items-center gap-2 px-3 py-1.5 bg-blue-500 hover:bg-blue-600 text-white rounded-full text-sm transition"
-                      >
-                        <FaCheck /> Confirm
-                      </button>
+
+                  {/* Action Buttons */}
+                  <div className="mt-4 flex gap-3">
+                    {order.orderStatus === "pending" && (
+                      <>
+                        <button
+                          onClick={() => handleUpdateStatus(order.id, "delivered")}
+                          className="px-4 py-2 bg-green-500 text-white rounded-lg shadow hover:bg-green-600 transition"
+                        >
+                          Deliver
+                        </button>
+                        <button
+                          onClick={() => handleUpdateStatus(order.id, "cancelled")}
+                          className="px-4 py-2 bg-red-500 text-white rounded-lg shadow hover:bg-red-600 transition"
+                        >
+                          Cancel
+                        </button>
+                      </>
                     )}
-                    {order.orderStatus !== "shipped" && order.orderStatus !== "delivered" && (
+
+                    {order.orderStatus === "delivered" && (
                       <button
-                        onClick={() => updateStatus(order.id, "shipped")}
-                        className="flex items-center gap-2 px-3 py-1.5 bg-purple-500 hover:bg-purple-600 text-white rounded-full text-sm transition"
+                        onClick={() => handleUpdateStatus(order.id, "cancelled")}
+                        className="px-4 py-2 bg-red-500 text-white rounded-lg shadow hover:bg-red-600 transition"
                       >
-                        <FaTruck /> Ship
-                      </button>
-                    )}
-                    {order.orderStatus !== "delivered" && (
-                      <button
-                        onClick={() => updateStatus(order.id, "delivered")}
-                        className="flex items-center gap-2 px-3 py-1.5 bg-green-500 hover:bg-green-600 text-white rounded-full text-sm transition"
-                      >
-                        <FaBoxOpen /> Deliver
+                        Cancel
                       </button>
                     )}
                   </div>
+
                 </motion.div>
               ))
             ) : (
               <p className="text-center text-gray-500 col-span-full animate-pulse text-lg">
-                No orders yet 🚀
+                No {filter} orders found 🚀
               </p>
             )}
           </>
