@@ -42,7 +42,6 @@ export default function AdminManageMedicines() {
         "Others",
     ];
 
-
     useEffect(() => {
         dispatch(clearMedicine());
     }, [])
