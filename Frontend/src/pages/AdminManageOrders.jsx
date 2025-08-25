@@ -215,7 +215,7 @@ export default function AdminManageOrders() {
               ))
             ) : (
               <p className="text-center text-gray-500 col-span-full animate-pulse text-lg">
-                No {filter} orders found 🚀
+                No {filter} orders found
               </p>
             )}
           </>
